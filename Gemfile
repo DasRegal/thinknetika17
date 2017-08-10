@@ -59,3 +59,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 group :test do 
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
 end
+
+gem 'slim-rails'
+#rspec зачем то попросил его
+gem 'rails-controller-testing'
