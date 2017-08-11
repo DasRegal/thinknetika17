@@ -1,18 +1,18 @@
 class AnswersController < ApplicationController
   def index
-    @answers = Question.find(params[:question_id]).answers
+    @answers = question.answers
   end
 
   def new
-    @answer = Question.find(params[:question_id]).answers.new
+    @answer = question.answers.new
   end
 
   def show
-    @answer = Answer.find(params[:id])
+    answer
   end
 
   def edit
-    @answer = Answer.find(params[:id])
+    answer
   end
 
   def create
@@ -23,12 +23,19 @@ class AnswersController < ApplicationController
     else
       render :new
     end
-
   end
 
   private
 
   def answer_params
     params.require(:answer).permit(:body)
+  end
+
+  def answer 
+    @answer ||= Answer.find(params[:id])
+  end
+
+  def question
+    @question ||= Question.find(params[:question_id])
   end
 end
