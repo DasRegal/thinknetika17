@@ -58,7 +58,7 @@ let(:invalid_answer) { create(:invalid_answer) }
   describe 'POST #create' do 
     context 'with valid attributes' do 
       it 'saves the new answer in the db' do 
-        expect { post :create, params: {question_id: question, answer: attributes_for(:answer)  } }.to change(Answer, :count).by(1)
+        expect { post :create, params: {question_id: question, answer: attributes_for(:answer)  } }.to change(question.answers, :count).by(1)
       end
 
       it 'redirect to question show view' do 
