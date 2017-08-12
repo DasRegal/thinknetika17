@@ -1,4 +1,5 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, only: [:create, :destroy]
   def index
     @answers = question.answers
   end
@@ -19,9 +20,11 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
     @answer = @question.answers.new(answer_params)
     if @answer.save
+      flash[:notice] = 'Your answer was successfully created'
       redirect_to question_path(@question)
     else
-      render :new
+      flash[:alert] = 'Error while creating answer'
+      redirect_to question_path(@question)
     end
   end
 
