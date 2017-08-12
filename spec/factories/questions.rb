@@ -1,7 +1,15 @@
 FactoryGirl.define do
+  sequence :title do |n|
+    "Test title #{n}"
+  end
+
+  sequence :body do |n|
+    "Test body #{n}"
+  end
+
   factory :question do
-    title "MyString"
-    body "MyText"
+    title 
+    body 
     factory :question_with_answers do
       # posts_count is declared as a transient attribute and available in
       # attributes on the factory, as well as the callback via the evaluator
