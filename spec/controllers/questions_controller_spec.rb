@@ -109,12 +109,16 @@ let(:questions) { create_list(:question,2) }
     end
 
     context 'invalid attributes' do 
-      before { patch :update, params: { id: question, question: {title: 'title', body: nil} } }
+      before do
+        @old_title = question.title
+        @old_body = question.body
+        patch :update, params: { id: question, question: {title: 'title', body: nil} } 
+      end
 
       it 'does not chenge question attributes' do 
         question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+        expect(question.title).to eq @old_title
+        expect(question.body).to eq @old_body
       end
 
       it 're-render edit view' do 
