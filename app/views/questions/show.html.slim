@@ -6,6 +6,9 @@ div
 
 -@question.answers.each do|answer|
   p =answer.body
+  -if answer.user == current_user
+    .delete_answer
+      =link_to 'delete answer', question_answer_path(@question, answer), method: 'DELETE'
 
 =form_for @question.answers.build, url: question_answers_path(@question), method: 'POST' do |f| 
   =f.label :body, 'Your answer'

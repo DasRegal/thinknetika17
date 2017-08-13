@@ -17,14 +17,25 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+    @answer = question.answers.new(answer_params)
+    @answer.user = current_user
     if @answer.save
       flash[:notice] = 'Your answer was successfully created'
       redirect_to question_path(@question)
     else
       flash[:alert] = 'Error while creating answer'
       redirect_to question_path(@question)
+    end
+  end
+
+  def destroy
+    if answer.user == current_user
+      answer.destroy
+      flash[:notice] = 'Your answer was succesfully deleted'
+      redirect_to question_path(question)
+    else
+      flash[:alert] = 'You dont have enough privilege'
+      redirect_to question_path(question)
     end
   end
 

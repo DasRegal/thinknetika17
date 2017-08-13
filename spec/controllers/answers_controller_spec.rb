@@ -79,4 +79,34 @@ let(:invalid_answer) { create(:invalid_answer) }
       end
     end
   end
+
+  describe 'DELETE #destroy' do 
+    context 'his own answer' do 
+      sign_in_user
+      before { question_with_answers.answers.first.update(user_id: @user.id) }
+
+      it 'deletes question' do 
+        expect { delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first } }.to change(Answer, :count).by(-1) 
+      end
+
+      it 'redirect to parent question show' do 
+        delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first }
+        expect(response).to redirect_to question_path(question_with_answers)
+      end
+    end
+
+    context 'not his answer' do 
+      sign_in_user
+
+      it 'deletes question' do 
+        question_with_answers
+        expect { delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first } }.to_not change(Answer, :count) 
+      end
+
+      it 'redirect to parent question show' do 
+        delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first }
+        expect(response).to redirect_to question_path(question_with_answers)
+      end      
+    end
+  end
 end
