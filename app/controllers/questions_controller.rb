@@ -37,9 +37,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    flash[:notice] = 'Your question was succesfully deleted'
-    redirect_to questions_path
+    if @question.user == current_user
+      @question.destroy
+      flash[:notice] = 'Your question was succesfully deleted'
+      redirect_to questions_path
+    else
+      flash[:alert] = 'You dont have enough privilege'
+      render :show
+    end
   end
 
   private

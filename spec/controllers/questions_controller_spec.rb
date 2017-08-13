@@ -128,15 +128,30 @@ let(:questions) { create_list(:question,2) }
   end
 
   describe 'DELETE #destroy' do 
-    sign_in_user
-    it 'deletes question' do 
-      question
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1) 
+    context 'his own question' do 
+      sign_in_user
+      before { question.update(user_id: @user.id) }
+      it 'deletes question' do 
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1) 
+      end
+
+      it 'redirect to index view' do 
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to index view' do 
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context 'not his question' do 
+      sign_in_user
+      it 'not deletes question' do 
+        question
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it 'redirect to show view' do 
+        delete :destroy, params: { id: question }
+        expect(response).to render_template :show
+      end      
     end
   end
 end
