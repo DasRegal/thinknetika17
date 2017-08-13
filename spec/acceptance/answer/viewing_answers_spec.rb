@@ -12,7 +12,6 @@ feature 'viewing answers', %q{
     question.answers.each do |answer|
       expect(page).to have_content(answer.body)
     end
-    save_and_open_page
   end
 
   scenario 'Non-authenticate user tries to view list of questions' do 
