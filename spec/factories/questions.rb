@@ -10,6 +10,7 @@ FactoryGirl.define do
   factory :question do
     title 
     body 
+    user
     factory :question_with_answers do
       # posts_count is declared as a transient attribute and available in
       # attributes on the factory, as well as the callback via the evaluator
