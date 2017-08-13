@@ -12,7 +12,6 @@ feature 'delete answer', %q{
     sign_in(user)
     question.answers.update_all(user_id: user.id)
     visit question_path(question)
-    save_and_open_page
     first('.delete_answer').click_link 'delete answer'
     expect(page).to have_content('Your answer was succesfully deleted')
     expect(current_path).to eq question_path(question)
