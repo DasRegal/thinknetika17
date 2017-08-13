@@ -1,6 +1,8 @@
 div 
   =@question.title
   =@question.body
+  -if @question.user == current_user
+    =link_to 'delete question', question_path(@question), method: 'DELETE'
 
 -@question.answers.each do|answer|
   p =answer.body
