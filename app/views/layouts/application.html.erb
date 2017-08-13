@@ -9,7 +9,9 @@
   </head>
 
   <body>
-    <div><%=  link_to  'Sign out', destroy_user_session_path, method: 'DELETE'  if current_user %></div>
+    <div><%=  link_to  'Sign out', destroy_user_session_path, method: 'DELETE'  if current_user %>
+      <%=  link_to  'Sign up', new_user_registration_path  unless current_user %>
+    </div>
    <p class="notice"><%= notice %></p>
    <p class="alert"><%= alert %></p>
 
