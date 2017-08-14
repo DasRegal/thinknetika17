@@ -11,8 +11,11 @@ feature 'delete answer', %q{
   scenario 'authenticated user tries to delete his own answer' do 
     sign_in(user)
     question.answers.update_all(user_id: user.id)
+    old_answer_body = question.answers.first.body
+    
     visit question_path(question)
     first('.delete_answer').click_link 'delete answer'
+    expect(page).to_not have_content old_answer_body
     expect(page).to have_content('Your answer was succesfully deleted')
     expect(current_path).to eq question_path(question)
   end

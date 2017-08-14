@@ -21,11 +21,10 @@ class AnswersController < ApplicationController
     if answer.user == current_user
       answer.destroy
       flash[:notice] = 'Your answer was succesfully deleted'
-      redirect_to question_path(question)
     else
       flash[:alert] = 'You dont have enough privilege'
-      redirect_to question_path(question)
     end
+    redirect_to question_path(question)
   end
 
   private
