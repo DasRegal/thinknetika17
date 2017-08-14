@@ -1,16 +1,5 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy]
-  def index
-    @answers = question.answers
-  end
-
-  def new
-    @answer = question.answers.new
-  end
-
-  def show
-    answer
-  end
 
   def edit
     answer
@@ -24,7 +13,7 @@ class AnswersController < ApplicationController
       redirect_to question_path(@question)
     else
       flash[:alert] = 'Error while creating answer'
-      redirect_to question_path(@question)
+      render 'questions/show'
     end
   end
 
