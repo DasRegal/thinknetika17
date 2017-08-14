@@ -73,6 +73,11 @@ let(:questions) { create_list(:question,2) }
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to question_path(assigns(:question))
       end
+
+      it 'have current_user as author' do 
+        post :create, params: { question: attributes_for(:question) }
+        expect(assigns(:question).user).to eq @user
+      end
     end
 
     context 'with invalid attributes' do 
