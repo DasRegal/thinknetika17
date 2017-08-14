@@ -1,5 +1,7 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
+  
 
   def index
     @questions = Question.all
@@ -17,10 +19,12 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
-
+    @question.user = current_user
     if @question.save
+      flash[:notice] = 'Your question successfully created.'
       redirect_to @question
     else
+      flash[:alert] = 'Error while creating question'
       render :new
     end
   end
@@ -34,8 +38,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if current_user.author_of?(@question)
+      @question.destroy
+      flash[:notice] = 'Your question was succesfully deleted'
+      redirect_to questions_path
+    else
+      flash[:alert] = 'You dont have enough privilege'
+      render :show
+    end
   end
 
   private

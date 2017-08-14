@@ -6,43 +6,6 @@ let(:question_with_answers) { create(:question_with_answers) }
 let(:answer) { create(:answer) }
 let(:invalid_answer) { create(:invalid_answer) }
 
-  describe 'GET #index' do 
-    before { get :index, params: { question_id: question_with_answers } }
-
-    it 'populates an array of all answers for question' do 
-      expect(assigns(:answers)).to match_array(question_with_answers.answers)
-    end
-
-    it 'renders index view' do
-      expect(response).to render_template :index
-    end
-  end
-
-  describe 'GET #show' do
-    before do 
-      get :show, params: { id: question_with_answers.answers.first, question_id: question_with_answers }
-    end
-
-    it 'assigns the requested answer to @answer' do 
-      expect(assigns(:answer)).to eq question_with_answers.answers.first
-    end 
-
-    it 'renders show view' do 
-      expect(response).to render_template :show
-    end
-  end
-
-  describe 'GET #new' do 
-    before { get :new, params: { question_id: question } }
-    it 'assign a new answer to @answer' do 
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'renders new view' do 
-      expect(response).to render_template :new
-    end
-  end
-
   describe 'GET #edit' do
     before { get :edit, params: { id: question_with_answers.answers.first, question_id: question_with_answers } }
 
@@ -56,6 +19,7 @@ let(:invalid_answer) { create(:invalid_answer) }
   end
 
   describe 'POST #create' do 
+    sign_in_user
     context 'with valid attributes' do 
       it 'saves the new answer in the db' do 
         expect { post :create, params: {question_id: question, answer: attributes_for(:answer)  } }.to change(question.answers, :count).by(1)
@@ -64,6 +28,11 @@ let(:invalid_answer) { create(:invalid_answer) }
       it 'redirect to question show view' do 
         post :create, params: {question_id: question, answer: attributes_for(:answer)  }
         expect(response).to redirect_to question_path(assigns(:question))
+      end
+
+      it 'have current_user as author' do 
+        post :create, params: {question_id: question, answer: attributes_for(:answer)  }
+        expect(assigns(:answer).user).to eq @user
       end
     end
 
@@ -74,8 +43,38 @@ let(:invalid_answer) { create(:invalid_answer) }
 
       it 'redirect to answer new view' do 
         post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)  }
-        expect(response).to render_template :new
+        expect(response).to render_template 'questions/show'
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do 
+    context 'his own answer' do 
+      sign_in_user
+      before { question_with_answers.answers.first.update(user_id: @user.id) }
+
+      it 'deletes question' do 
+        expect { delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first } }.to change(Answer, :count).by(-1) 
+      end
+
+      it 'redirect to parent question show' do 
+        delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first }
+        expect(response).to redirect_to question_path(question_with_answers)
+      end
+    end
+
+    context 'not his answer' do 
+      sign_in_user
+
+      it 'deletes question' do 
+        question_with_answers
+        expect { delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first } }.to_not change(Answer, :count) 
+      end
+
+      it 'redirect to parent question show' do 
+        delete :destroy, params: { question_id: question_with_answers, id: question_with_answers.answers.first }
+        expect(response).to redirect_to question_path(question_with_answers)
+      end      
     end
   end
 end

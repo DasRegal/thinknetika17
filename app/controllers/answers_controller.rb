@@ -1,28 +1,30 @@
 class AnswersController < ApplicationController
-  def index
-    @answers = question.answers
-  end
-
-  def new
-    @answer = question.answers.new
-  end
-
-  def show
-    answer
-  end
+  before_action :authenticate_user!, only: [:create, :destroy]
 
   def edit
     answer
   end
 
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+    @answer = question.answers.new(answer_params)
+    @answer.user = current_user
     if @answer.save
+      flash[:notice] = 'Your answer was successfully created'
       redirect_to question_path(@question)
     else
-      render :new
+      flash[:alert] = 'Error while creating answer'
+      render 'questions/show'
     end
+  end
+
+  def destroy
+    if current_user.author_of?(answer)
+      answer.destroy
+      flash[:notice] = 'Your answer was succesfully deleted'
+    else
+      flash[:alert] = 'You dont have enough privilege'
+    end
+    redirect_to question_path(question)
   end
 
   private
