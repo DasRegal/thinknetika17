@@ -5,16 +5,19 @@ RSpec.describe User do
   it { should have_many(:answers).dependent(:destroy) }
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
-  it 'author_of methods work correct' do 
-    user = create :user
-    question = create :question
-    answer = create :answer
-    expect(user.author_of?(question)).to eq false
-    expect(user.author_of?(answer)).to eq false
+  context 'author_of methods work correct' do 
+    before do 
+      @user = create :user
+      @question = create :question
+    end
 
-    question.user = user
-    answer.user = user
-    expect(user.author_of?(question)).to eq true
-    expect(user.author_of?(answer)).to eq true
+    it 'returt true if user is author_of object' do 
+      @question.user = @user
+      expect(@user).to be_author_of(@question)
+    end
+
+    it 'returt false if user is not author_of object' do 
+      expect(@user).to_not be_author_of(@question)
+    end
   end
 end

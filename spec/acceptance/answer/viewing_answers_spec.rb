@@ -6,14 +6,6 @@ feature 'viewing answers', %q{
   given!(:question) { create(:question_with_answers) }
   given(:user){ create(:user) }
 
-  after do 
-    expect(page).to have_content(question.title)
-    expect(page).to have_content(question.body)
-    question.answers.each do |answer|
-      expect(page).to have_content(answer.body)
-    end
-  end
-
   scenario 'Non-authenticate user tries to view list of questions' do 
     visit question_path(question)
   end
@@ -21,5 +13,13 @@ feature 'viewing answers', %q{
   scenario 'Authenticate user tries to view list of questions' do 
     sign_in(user)
     visit question_path(question)
+  end
+  
+  after do 
+    expect(page).to have_content(question.title)
+    expect(page).to have_content(question.body)
+    question.answers.each do |answer|
+      expect(page).to have_content(answer.body)
+    end
   end
 end
