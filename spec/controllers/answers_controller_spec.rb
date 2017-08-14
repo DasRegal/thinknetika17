@@ -22,16 +22,16 @@ let(:invalid_answer) { create(:invalid_answer) }
     sign_in_user
     context 'with valid attributes' do 
       it 'saves the new answer in the db' do 
-        expect { post :create, params: {question_id: question, answer: attributes_for(:answer)  } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js } }.to change(question.answers, :count).by(1)
       end
 
-      it 'redirect to question show view' do 
-        post :create, params: {question_id: question, answer: attributes_for(:answer)  }
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'render create template' do 
+        post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js   }
+        expect(response).to render_template 'create'
       end
 
       it 'have current_user as author' do 
-        post :create, params: {question_id: question, answer: attributes_for(:answer)  }
+        post :create, params: {question_id: question, answer: attributes_for(:answer), format: :js   }
         expect(assigns(:answer).user).to eq @user
       end
     end
@@ -41,7 +41,7 @@ let(:invalid_answer) { create(:invalid_answer) }
         expect { post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)  } }.to_not change(Answer, :count)
       end
 
-      it 'redirect to answer new view' do 
+      it 'render template question show view' do 
         post :create, params: {question_id: question, answer: attributes_for(:invalid_answer)  }
         expect(response).to render_template 'questions/show'
       end

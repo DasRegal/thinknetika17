@@ -42,7 +42,7 @@ group :development, :test do
   gem 'selenium-webdriver'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -66,3 +66,5 @@ end
 gem 'slim-rails'
 #rspec зачем то попросил его
 gem 'rails-controller-testing'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'

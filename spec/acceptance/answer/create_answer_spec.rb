@@ -8,7 +8,7 @@ feature 'Answer for question', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
-  scenario 'authenticated user creates valid answer' do 
+  scenario 'authenticated user creates valid answer', js: true do 
     sign_in(user)
 
     visit question_path(question)
@@ -16,7 +16,9 @@ feature 'Answer for question', %q{
     click_on 'Add answer'
 
     expect(page).to have_content 'Your answer was successfully created'
-    expect(page).to have_content 'My test answer'
+    within '.answers_container' do 
+      expect(page).to have_content 'My test answer'
+    end
     expect(current_path).to eq question_path(question)
   end
 
