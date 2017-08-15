@@ -9,11 +9,9 @@ class AnswersController < ApplicationController
     @answer = question.answers.new(answer_params)
     @answer.user = current_user
     if @answer.save
-      flash[:notice] = 'Your answer was successfully created'
-      redirect_to question_path(@question)
+      flash.now[:notice] = 'Your answer was successfully created'
     else
-      flash[:alert] = 'Error while creating answer'
-      render 'questions/show'
+      flash.now[:alert] = 'Error while creating answer'
     end
   end
 
