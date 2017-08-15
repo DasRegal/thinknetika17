@@ -22,21 +22,19 @@ feature 'Answer for question', %q{
     expect(current_path).to eq question_path(question)
   end
 
-  scenario 'authenticated user tries to creates invalid answer' do
+  scenario 'authenticated user tries to creates invalid answer', js: true do
     sign_in(user)
     visit question_path(question)
     click_on 'Add answer'
 
     expect(page).to have_content 'Error while creating answer'
     expect(page).to have_content 'Body can\'t be blank'
-    # expect(current_path).to eq question_path(question)    
+    expect(current_path).to eq question_path(question)    
   end
 
-  scenario 'non-authenticated user try to creates answer' do 
+  scenario 'non-authenticated user try to creates answer', js: true do 
     visit question_path(question)
-    fill_in 'Your answer', with: 'My test answer'
-    click_on 'Add answer'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_content 'Your answer'
   end
 end

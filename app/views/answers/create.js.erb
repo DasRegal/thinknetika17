@@ -1,2 +1,6 @@
-$('.answers_container').html('<%= j render "questions/answers" %>');
+$('.alert').html("<%=  alert %>");
+$('.notice').html("<%=  notice %>");
+$('.validation_errors').val('');
+$('.validation_errors').html("<%= @answer.errors.full_messages.join('<br') %>");
+$('.answers_container').append('<%= j render "questions/answer", answer: @answer %>');
 $('#answer_body').val('');

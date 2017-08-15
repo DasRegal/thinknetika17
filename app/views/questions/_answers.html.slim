@@ -1,8 +1,4 @@
 -@question.answers.each do |answer|
   -next unless answer.persisted?
-  p =answer.body
-  -if current_user&.author_of?(answer)
-    .delete_answer
-      =link_to 'delete answer', question_answer_path(@question, answer), method: :delete
-p= notice
-p= alert 
+  =render 'questions/answer', answer: answer
+

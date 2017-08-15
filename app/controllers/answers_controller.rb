@@ -11,8 +11,7 @@ class AnswersController < ApplicationController
     if @answer.save
       flash.now[:notice] = 'Your answer was successfully created'
     else
-      flash[:alert] = 'Error while creating answer'
-      render 'questions/show'
+      flash.now[:alert] = 'Error while creating answer'
     end
   end
 
