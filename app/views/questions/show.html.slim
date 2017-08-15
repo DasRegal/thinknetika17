@@ -8,7 +8,7 @@ div
   -if current_user&.author_of?(@question)
     =link_to 'delete question', question_path(@question), method: :delete
   .answers_container
-    =render 'questions/answers'
+    =render @question.answers
 
 -if current_user
   =form_for [@question, @answer], method: :post, remote: true do |f| 
