@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :authenticate_user!, only: [:create, :destroy, :update]
 
   def edit
     answer
@@ -14,6 +14,18 @@ class AnswersController < ApplicationController
       flash.now[:alert] = 'Error while creating answer'
     end
   end
+
+  def update 
+    if current_user.author_of?(answer)
+      if answer.update(answer_params)
+        flash.now[:notice] = 'Your answer was succesfully updated'
+      else
+        flash.now[:alert] = 'Error while creating answer'
+      end
+    else
+      flash.now[:alert] = 'You dont have enough privilege'
+    end
+  end 
 
   def destroy
     if current_user.author_of?(answer)

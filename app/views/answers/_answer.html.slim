@@ -1,6 +1,13 @@
 -if answer.persisted?
   .answer
-    p =answer.body
+    p.answer_body data={answer_id:answer.id} =answer.body
     -if current_user&.author_of?(answer)
+      .edit_answer
+        =link_to 'Edit','', data: { edit_answer_link_id: answer.id }, class: 'edit_answer_link'
       .delete_answer
         =link_to 'delete answer', question_answer_path(@question, answer), method: :delete, class: 'delete_answer'
+      .edit_answer_form id="edit_answer_form_#{answer.id}"
+        =form_for [@question, answer], remote: true, method: :patch do |f|
+          =f.label :body, 'Answer'
+          =f.text_area :body
+          =f.submit 'Save'
