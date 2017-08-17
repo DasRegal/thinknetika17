@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
   resources :questions do 
-    resources :answers
+    resources :answers do 
+      get 'set_as_best', on: :member
+    end
   end
 
   root to: 'questions#index'

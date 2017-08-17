@@ -1,5 +1,7 @@
 -if answer.persisted?
-  .answer data={answer_id:answer.id}
+  .answer data={answer_id:answer.id} class=(answer.is_best_flag ? 'best_answer' : '')
+    -if current_user&.author_of?(@question)
+      p =link_to 'Mark as best', set_as_best_question_answer_path(@question, answer), remote: true
     p.answer_body data={answer_id:answer.id} =answer.body
     -if current_user&.author_of?(answer)
       .edit_answer

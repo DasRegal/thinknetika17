@@ -89,7 +89,7 @@ let(:invalid_answer) { create(:invalid_answer) }
       end
 
       it 'changes answer attributes' do 
-        patch :update, params: { id: answer, question_id: question, answer: {body: 'body'}, format: :js } 
+        patch :update, params: { id: answer, question_id: question, answer: {body: 'body'} }, xhr: true 
         answer.reload
         expect(answer.body).to eq 'body'
       end
@@ -121,7 +121,7 @@ let(:invalid_answer) { create(:invalid_answer) }
       before do 
         answer.update(user_id: user.id)
         @old_body = answer.body
-        patch :update, params: { id: answer, question_id: question, answer: { body: nil }, format: :js }        
+        patch :update, params: { id: answer, question_id: question, answer: { body: nil } },xhr: true        
       end
 
       it 'does not change answer attributes' do 
@@ -139,4 +139,56 @@ let(:invalid_answer) { create(:invalid_answer) }
     end  
   end
 
+  describe 'GET #set_as_best' do 
+    context 'authenticate user' do
+      sign_in_user
+      context 'question author try to mark' do 
+        before do 
+          @question = question_with_answers
+          @question.update(user: @user)
+          @answer = @question.answers.first
+        end
+
+        it 'set answer as best' do 
+          expect { get :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to change { @question.answers.best }.to(@answer)
+        end
+
+        it 'render_template set_as_best' do 
+          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          expect(response).to render_template :set_as_best
+        end
+
+        it 'set flash variable' do 
+          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          expect(flash['notice']).to eq 'Answer set as best'
+        end
+      end
+
+      context 'non-author try to mark' do 
+        before do 
+          @question = question_with_answers
+          @question.set_best_answer(@question.answers.last)
+          @answer = create(:answer)
+        end
+
+        it 'render_template set_as_best' do 
+          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          expect(response).to render_template :set_as_best
+        end
+
+        it 'set flash variable' do 
+          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          expect(flash['alert']).to eq 'You dont have enough privilege'
+        end
+
+        it 'do not change best answer' do 
+          expect { get :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @question.answers.best }
+        end
+
+        it 'do not change answer best flag' do 
+          expect { get :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @answer.best_answer? }
+        end
+      end
+    end
+  end
 end

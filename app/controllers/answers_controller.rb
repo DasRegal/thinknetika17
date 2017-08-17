@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy, :update]
+  before_action :authenticate_user!, only: [:create, :destroy, :update, :set_as_best]
 
   def edit
     answer
@@ -9,9 +9,9 @@ class AnswersController < ApplicationController
     @answer = question.answers.new(answer_params)
     @answer.user = current_user
     if @answer.save
-      flash.now[:notice] = 'Your answer was successfully created'
+      flash[:notice] = 'Your answer was successfully created'
     else
-      flash.now[:alert] = 'Error while creating answer'
+      flash[:alert] = 'Error while creating answer'
     end
   end
 
@@ -30,9 +30,18 @@ class AnswersController < ApplicationController
   def destroy
     if current_user.author_of?(answer)
       answer.destroy
-      flash[:notice] = 'Your answer was succesfully deleted'
+      flash.now[:notice] = 'Your answer was succesfully deleted'
     else
-      flash[:alert] = 'You dont have enough privilege'
+      flash.now[:alert] = 'You dont have enough privilege'
+    end
+  end
+
+  def set_as_best
+    if current_user.author_of?(question)
+      question.set_best_answer(answer)
+      flash.now[:notice] = 'Answer set as best'
+    else
+      flash.now[:alert] = 'You dont have enough privilege'
     end
   end
 
