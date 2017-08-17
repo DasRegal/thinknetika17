@@ -37,9 +37,9 @@ feature 'Answerediting', %q{
     end
 
     scenario 'try to edit his answer with valid attributes', js: true do 
-      click_on 'Edit'
       within '.answer' do 
-        fill_in 'Answer', with: 'edited answer'
+        click_on 'Edit'  
+        fill_in 'answer[body]', with: 'edited answer'
         click_on 'Save'
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
@@ -49,9 +49,10 @@ feature 'Answerediting', %q{
     end
 
     scenario 'author try to update with invalid attributes', js: true do 
-      click_on 'Edit'
+      
       within '.answer' do 
-        fill_in 'Answer', with: nil
+        click_on 'Edit'
+        fill_in 'answer[body]', with: nil
         click_on 'Save'
         expect(page).to have_content answer.body
       end
@@ -69,7 +70,7 @@ feature 'Answerediting', %q{
       #Пробуем его редактировать
       within all('.answer').last do 
         click_on 'Edit'
-        fill_in 'Answer', with: 'new edited answer'
+        fill_in 'answer[body]', with: 'new edited answer'
         click_on 'Save'
        
         expect(page).to have_content 'new edited answer'

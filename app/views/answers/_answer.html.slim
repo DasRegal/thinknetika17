@@ -7,7 +7,7 @@
       .delete_answer
         =link_to 'delete answer', question_answer_path(@question, answer), method: :delete, class: 'delete_answer'
       .edit_answer_form id="edit_answer_form_#{answer.id}"
-        =form_for [@question, answer], remote: true, method: :patch do |f|
+        =form_for [@question, answer], remote: true, method: :patch  do |f|
           =f.label :body, 'Answer'
-          =f.text_area :body
+          =f.text_area :body, id: "edit_answer_body_#{answer.id}"
           =f.submit 'Save'
