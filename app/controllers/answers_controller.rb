@@ -34,7 +34,6 @@ class AnswersController < ApplicationController
     else
       flash[:alert] = 'You dont have enough privilege'
     end
-    redirect_to question_path(question)
   end
 
   private

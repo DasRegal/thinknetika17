@@ -7,3 +7,7 @@ $ ->
     id = $(this).data('editAnswerLinkId')
     $("#edit_answer_form_"+id).show()
     $(this).hide();
+
+  $('.answers_container').on 'click', '.delete_answer', (e) -> 
+    id = $(this).data('answerId')
+    # $(".answer[data-answerId=#{id}]").hide()
