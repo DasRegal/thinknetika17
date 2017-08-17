@@ -31,7 +31,7 @@ feature 'Answerediting', %q{
       sign_in user
       visit question_path(question)
     end
-    
+
     scenario 'sees the link edit' do 
       expect(page).to have_link 'Edit'
     end
@@ -58,8 +58,25 @@ feature 'Answerediting', %q{
       expect(page).to have_content 'Error while creating answer'            
       expect(page).to have_content 'Body can\'t be blank'
     end
+
+    scenario 'edit barely created answer', js: true do 
+      #Проверяем возможность редактирования только что созданного ответа
+      fill_in 'Your answer', with: 'My new answer'
+      click_on 'Add answer'
+      #Ждем пока в ДОМ прилетит новый ответ, без этого не работает.
+      sleep(3)
+
+      #Пробуем его редактировать
+      within all('.answer').last do 
+        click_on 'Edit'
+        fill_in 'Answer', with: 'new edited answer'
+        click_on 'Save'
+       
+        expect(page).to have_content 'new edited answer'
+        expect(page).to_not have_selector 'textarea'        
+      end
+      expect(page).to_not have_content 'My new answer'
+      expect(page).to have_content 'Your answer was succesfully updated'
+    end
   end
-
-
-
 end
