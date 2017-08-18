@@ -17,7 +17,7 @@ div
         =f.text_area :title
         =f.submit 'Save'      
   .answers_container
-    =render @question.answers.order(is_best_flag: :desc , created_at: :asc)
+    =render @question.answers.order(is_best: :desc , created_at: :asc)
 
 -if current_user
   =form_for [@question, @answer], method: :post, remote: true do |f| 

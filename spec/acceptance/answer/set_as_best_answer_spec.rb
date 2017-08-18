@@ -18,7 +18,6 @@ feature 'settig best answer', %q{
       within all('.answer').last do 
         click_on 'Mark as best'
         sleep(3)
-        save_and_open_page
       end
       expect(page).to have_css '.best_answer'
     end

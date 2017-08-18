@@ -38,7 +38,7 @@ class AnswersController < ApplicationController
 
   def set_as_best
     if current_user.author_of?(question)
-      question.set_best_answer(answer)
+      answer.set_best
       flash.now[:notice] = 'Answer set as best'
     else
       flash.now[:alert] = 'You dont have enough privilege'

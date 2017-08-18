@@ -150,16 +150,16 @@ let(:invalid_answer) { create(:invalid_answer) }
         end
 
         it 'set answer as best' do 
-          expect { get :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to change { @question.answers.best }.to(@answer)
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to change { @question.answers.best }.to(@answer)
         end
 
         it 'render_template set_as_best' do 
-          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
           expect(response).to render_template :set_as_best
         end
 
         it 'set flash variable' do 
-          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
           expect(flash['notice']).to eq 'Answer set as best'
         end
       end
@@ -172,21 +172,21 @@ let(:invalid_answer) { create(:invalid_answer) }
         end
 
         it 'render_template set_as_best' do 
-          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
           expect(response).to render_template :set_as_best
         end
 
         it 'set flash variable' do 
-          get :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
           expect(flash['alert']).to eq 'You dont have enough privilege'
         end
 
         it 'do not change best answer' do 
-          expect { get :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @question.answers.best }
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @question.answers.best }
         end
 
         it 'do not change answer best flag' do 
-          expect { get :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @answer.best_answer? }
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @answer.best_answer? }
         end
       end
     end

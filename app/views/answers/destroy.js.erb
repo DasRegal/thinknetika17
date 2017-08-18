@@ -1,5 +1,5 @@
 $('.alert').html("<%=  alert %>");
 $('.notice').html("<%=  notice %>");
 <% unless @answer.persisted? %>
-  $(".answer[data-answer-id=<%= @answer.id %>]").hide();
+  $(".answer[data-answer-id=<%= @answer.id %>]").remove();
 <% end %>
