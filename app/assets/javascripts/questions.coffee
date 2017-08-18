@@ -11,4 +11,3 @@ question_ready =  ->
 
 $(document).ready(question_ready) # "вешаем" функцию ready на событие document.ready
 $(document).on('turbolinks:load', question_ready)  # "вешаем" функцию ready на событие page:load
-$(document).on('turbolinks:update', question_ready) # "вешаем" функцию ready на событие page:update

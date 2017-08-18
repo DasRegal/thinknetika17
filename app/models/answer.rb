@@ -4,15 +4,12 @@ class Answer < ApplicationRecord
   
   validates  :body, presence: true
 
-  def self.bests
-    where(is_best_flag: true)
-  end
-
-  def self.best
-    find_by(is_best_flag: true)
-  end
-
-  def best_answer?
-    self.is_best_flag
+  scope :bests, -> { where(is_best: true) }
+  
+  def set_best
+    self.transaction do 
+      self.question.answers.update_all(is_best: false)
+      self.update(is_best: true)
+    end
   end
 end
