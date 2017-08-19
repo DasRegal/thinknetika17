@@ -3,12 +3,21 @@
     -@answer.errors.full_messages.each do |msg|
       p =msg
 div 
-  =@question.title
-  =@question.body
+  p.question_title =@question.title
+  p.question_body =@question.body
   -if current_user&.author_of?(@question)
     =link_to 'delete question', question_path(@question), method: :delete
+    br
+    =link_to 'Edit question','', class: 'edit_question_link'
+    .edit_question_form 
+      =form_for @question, remote: true, method: :patch  do |f|
+        =f.label :body, 'new body'
+        =f.text_area :body
+        =f.label :title, 'new title'
+        =f.text_area :title
+        =f.submit 'Save'      
   .answers_container
-    =render @question.answers
+    =render @question.answers.order(is_best: :desc , created_at: :asc)
 
 -if current_user
   =form_for [@question, @answer], method: :post, remote: true do |f| 

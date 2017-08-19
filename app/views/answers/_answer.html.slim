@@ -1,6 +1,15 @@
 -if answer.persisted?
-  .answer
-    p =answer.body
+  .answer data={answer_id:answer.id} class=(answer.is_best ? 'best_answer' : '')
+    -if current_user&.author_of?(@question)
+      p =link_to 'Mark as best', set_as_best_question_answer_path(@question, answer), remote: true, method: :patch
+    p.answer_body data={answer_id:answer.id} =answer.body
     -if current_user&.author_of?(answer)
+      .edit_answer
+        =link_to 'Edit','', data: { edit_answer_link_id: answer.id }, class: 'edit_answer_link'
       .delete_answer
-        =link_to 'delete answer', question_answer_path(@question, answer), method: :delete, class: 'delete_answer'
+        =link_to 'delete answer', question_answer_path(@question, answer), method: :delete, class: 'delete_answer', remote: true, data: {answer_id: answer.id}
+      .edit_answer_form id="edit_answer_form_#{answer.id}"
+        =form_for [@question, answer], remote: true, method: :patch  do |f|
+          =f.label :body, 'Answer'
+          =f.text_area :body, id: "edit_answer_body_#{answer.id}"
+          =f.submit 'Save'

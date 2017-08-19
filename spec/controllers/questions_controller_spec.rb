@@ -100,20 +100,21 @@ let(:questions) { create_list(:question,2) }
     sign_in_user
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do 
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do 
-        patch :update, params: { id: question, question: {title: 'title', body: 'body'} }
+        question.update(user: @user)
+        patch :update, params: { id: question, question: {title: 'title', body: 'body'}, format: :js }
         question.reload
         expect(question.title).to eq 'title'
         expect(question.body).to eq 'body'
       end
 
       it 'redirect to the updated question' do 
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question_path(assigns(:question))
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+        expect(response).to render_template :update
       end
     end
 
@@ -121,7 +122,7 @@ let(:questions) { create_list(:question,2) }
       before do
         @old_title = question.title
         @old_body = question.body
-        patch :update, params: { id: question, question: {title: 'title', body: nil} } 
+        patch :update, params: { id: question, question: {title: 'title', body: nil}, format: :js } 
       end
 
       it 'does not chenge question attributes' do 
@@ -130,8 +131,31 @@ let(:questions) { create_list(:question,2) }
         expect(question.body).to eq @old_body
       end
 
-      it 're-render edit view' do 
-        expect(response).to render_template :edit
+      it 're-render update' do 
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'non-author try to update' do 
+      before do 
+        question.update(user: create(:user))
+        @old_body = question.body
+        @old_title = question.title
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js}  
+      end
+
+      it 'does not change question attributes' do 
+        question.reload
+        expect(question.title).to eq @old_title
+        expect(question.body).to eq @old_body
+      end
+
+      it 're-render update' do 
+        expect(response).to render_template :update
+      end
+
+      it 'show flash message' do 
+        expect(flash['alert']).to eq 'You dont have enough privilege'
       end
     end
   end

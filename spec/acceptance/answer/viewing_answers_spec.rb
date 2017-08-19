@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'viewing answers', %q{
   All users can view list of answers to question

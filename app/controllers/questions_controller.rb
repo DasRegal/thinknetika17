@@ -31,10 +31,14 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
+    if current_user.author_of?(@question)
+      if @question.update(question_params)
+        flash.now[:notice] = 'Your question was succesfully updated'
+      else
+        flash.now[:alert] = 'Error while creating question'
+      end
     else
-      render :edit
+      flash.now[:alert] = 'You dont have enough privilege'
     end
   end
 

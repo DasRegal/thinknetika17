@@ -4,7 +4,7 @@ $('.validation_errors').val('');
 <% if @answer.errors.present? %>
   $('.validation_errors').html("<%= @answer.errors.full_messages.join('<br') %>");
 <% else %>
-  $('.answers_container').append('<%= j render @answer %>');
-  $('textarea#answer_body').val('');
+  $(".answer_body[data-answer-id='<%= @answer.id.to_s %>']").html('<%= j @answer.body %>');
   $("#edit_answer_form_"+<%= @answer.id %>).hide();
+  $(".edit_answer_link[data-edit-answer-link-id=<%= @answer.id %>]").show();
 <% end %>

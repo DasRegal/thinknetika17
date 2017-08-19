@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../acceptance_helper'
 
 feature 'delete answer', %q{
   In order to be able to delete answer
@@ -8,7 +8,7 @@ feature 'delete answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question_with_answers) }
 
-  scenario 'authenticated user tries to delete his own answer' do 
+  scenario 'authenticated user tries to delete his own answer', js: true do 
     sign_in(user)
     question.answers.update_all(user_id: user.id)
     old_answer_body = question.answers.first.body
