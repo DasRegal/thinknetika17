@@ -5,6 +5,6 @@ class Question < ApplicationRecord
   validates :title, :body, presence: true
 
   def best_answer
-    self.answers.find_by(is_best: true)
+    self.answers.bests.first
   end
 end

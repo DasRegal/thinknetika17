@@ -37,7 +37,7 @@ class AnswersController < ApplicationController
   end
 
   def set_as_best
-    if current_user.author_of?(question) and question.answers.include?(answer)
+    if current_user.author_of?(question) && question.answers.include?(answer)
       answer.set_best
       flash.now[:notice] = 'Answer set as best'
     else
