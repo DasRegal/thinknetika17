@@ -150,7 +150,7 @@ let(:invalid_answer) { create(:invalid_answer) }
         end
 
         it 'set answer as best' do 
-          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to change { @question.answers.best }.to(@answer)
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to change { @question.best_answer }.to(@answer)
         end
 
         it 'render_template set_as_best' do 
@@ -167,7 +167,7 @@ let(:invalid_answer) { create(:invalid_answer) }
       context 'non-author try to mark' do 
         before do 
           @question = question_with_answers
-          @question.set_best_answer(@question.answers.last)
+          @question.answers.last.set_best
           @answer = create(:answer)
         end
 
@@ -182,11 +182,11 @@ let(:invalid_answer) { create(:invalid_answer) }
         end
 
         it 'do not change best answer' do 
-          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @question.answers.best }
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @question.best_answer }
         end
 
         it 'do not change answer best flag' do 
-          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @answer.best_answer? }
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @answer.is_best? }
         end
       end
     end
