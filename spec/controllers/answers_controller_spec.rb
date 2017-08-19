@@ -139,7 +139,7 @@ let(:invalid_answer) { create(:invalid_answer) }
     end  
   end
 
-  describe 'GET #set_as_best' do 
+  describe 'PATCH #set_as_best' do 
     context 'authenticate user' do
       sign_in_user
       context 'question author try to mark' do 
@@ -154,12 +154,12 @@ let(:invalid_answer) { create(:invalid_answer) }
         end
 
         it 'render_template set_as_best' do 
-          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true
           expect(response).to render_template :set_as_best
         end
 
         it 'set flash variable' do 
-          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true
           expect(flash['notice']).to eq 'Answer set as best'
         end
       end
@@ -189,6 +189,33 @@ let(:invalid_answer) { create(:invalid_answer) }
           expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @answer.is_best? }
         end
       end
-    end
+
+      context 'answers now child of question' do 
+        before do 
+          @question = question_with_answers
+          @question.update(user: @user)
+          @question.answers.last.set_best
+          @answer = create(:answer)
+        end
+
+        it 'do not set answer as best' do 
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @answer.is_best? }
+        end
+
+        it 'do not set change question naswers' do 
+          expect { patch :set_as_best, params: { question_id: @question, id: @answer }, xhr: true }.to_not change { @question.best_answer }
+        end
+
+        it 'render_template set_as_best' do 
+          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          expect(response).to render_template :set_as_best
+        end
+
+        it 'set flash variable' do 
+          patch :set_as_best, params: { question_id: @question, id: answer }, xhr: true
+          expect(flash['alert']).to eq 'You dont have enough privilege'
+        end
+      end
+    end 
   end
 end
