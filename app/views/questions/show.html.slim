@@ -5,6 +5,11 @@
 div 
   p.question_title =@question.title
   p.question_body =@question.body
+  p Attachments:
+  ul 
+    - @question.attachments.each do |a|
+      li =a.file.file.filename
+      
   -if current_user&.author_of?(@question)
     =link_to 'delete question', question_path(@question), method: :delete
     br
