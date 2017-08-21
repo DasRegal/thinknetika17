@@ -5,12 +5,12 @@
 div 
   p.question_title =@question.title
   p.question_body =@question.body
-  p Attachments:
+  p.q_attachments_container Attachments:
   ul 
     -@question.attachments.each do |a|
       .attachment data-id=a.id
         li =link_to a.file.file.filename, a.file.url 
-        -if current_user.author_of?(a)
+        -if current_user.author_of?(@question)
           li =link_to 'delete attach', destroy_attachment_path(a), method: :delete, remote: true
 
   -if current_user&.author_of?(@question)
@@ -23,6 +23,10 @@ div
         =f.text_area :body
         =f.label :title, 'new title'
         =f.text_area :title
+        p 
+        =f.fields_for :attachments do |attach|
+          p= render 'attachment_fields', f: attach
+          p= link_to_add_association 'add file', f, :attachments
         =f.submit 'Save'      
   .answers_container
     =render @question.answers.order(is_best: :desc , created_at: :asc)
