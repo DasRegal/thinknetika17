@@ -8,7 +8,9 @@ div
   p Attachments:
   ul 
     -@question.attachments.each do |a|
-      li =link_to a.file.filename, a.file.url
+      .attachment data-id=a.id
+        li =link_to a.file.file.filename, a.file.url 
+        li =link_to 'delete attach', destroy_attachment_path(a), method: :delete, remote: true
 
   -if current_user&.author_of?(@question)
     =link_to 'delete question', question_path(@question), method: :delete
