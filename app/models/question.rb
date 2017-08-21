@@ -5,7 +5,7 @@ class Question < ApplicationRecord
   
   validates :title, :body, presence: true
 
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   def best_answer
     self.answers.bests.first

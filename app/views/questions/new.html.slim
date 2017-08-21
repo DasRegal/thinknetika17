@@ -12,7 +12,7 @@
   br
   p Attachments:
   p 
-    =f.fields_for :attachments do |a|
-      =a.label :file
-      =a.file_field :file
+    =f.fields_for :attachments do |attach|
+      p= render 'attachment_fields', f: attach
+      p= link_to_add_association 'add file', f, :attachments
   =f.submit 'Create'
