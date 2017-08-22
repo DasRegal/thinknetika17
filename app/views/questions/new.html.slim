@@ -10,4 +10,9 @@
   =f.label :body
   =f.text_area :body
   br
+  p Attachments:
+  p 
+    =f.fields_for :attachments do |attach|
+      p= render 'share/attachment_fields', f: attach
+      p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
   =f.submit 'Create'

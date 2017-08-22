@@ -5,6 +5,11 @@
 div 
   p.question_title =@question.title
   p.question_body =@question.body
+  div.q_attachments_wrapper
+    p Attachments:
+    ul.q_attachments_container
+      = render 'share/attachments', obj: @question
+
   -if current_user&.author_of?(@question)
     =link_to 'delete question', question_path(@question), method: :delete
     br
@@ -15,6 +20,10 @@ div
         =f.text_area :body
         =f.label :title, 'new title'
         =f.text_area :title
+        p 
+        =f.fields_for :attachments do |attach|
+          p= render 'share/attachment_fields', f: attach
+          p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
         =f.submit 'Save'      
   .answers_container
     =render @question.answers.order(is_best: :desc , created_at: :asc)
@@ -24,4 +33,8 @@ div
     =f.label :body, 'Your answer'
     =f.text_area :body
     br
+    p 
+      =f.fields_for :attachments do |attach|
+        p= render 'share/attachment_fields', f: attach
+        p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
     =f.submit 'Add answer'

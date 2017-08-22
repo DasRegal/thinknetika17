@@ -7,4 +7,5 @@ $('.validation_errors').val('');
   $('.answers_container').append('<%= j render @answer %>');
   $('textarea#answer_body').val('');
   $("#edit_answer_form_"+<%= @answer.id %>).hide();
+  $('#new_answer .nested-fields').remove();
 <% end %>

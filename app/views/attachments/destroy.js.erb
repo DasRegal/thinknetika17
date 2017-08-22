@@ -1,0 +1,5 @@
+$('.alert').html("<%=  alert %>");
+$('.notice').html("<%=  notice %>");
+<% unless alert %>
+$('.attachment[data-id=<%= @attachment.id %>]').remove();
+<% end %>

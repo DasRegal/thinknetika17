@@ -9,10 +9,16 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.new
+    @answer.attachments.build
+    # coccon не билдит аттачменты если их нет, поэтому не появляется форма
+    if @question.attachments.count == 0
+      @question.attachments.build
+    end
   end
 
   def new
     @question = Question.new
+    @question.attachments.build
   end
 
   def edit
@@ -60,6 +66,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
   end
 end

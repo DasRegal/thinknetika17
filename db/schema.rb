@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170817095910) do
+ActiveRecord::Schema.define(version: 20170820081330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,9 +20,18 @@ ActiveRecord::Schema.define(version: 20170817095910) do
     t.integer "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.boolean "is_best", default: false
     t.index ["user_id"], name: "index_answers_on_user_id"
+  end
+
+  create_table "attachments", force: :cascade do |t|
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "attachmentable_id"
+    t.string "attachmentable_type"
+    t.index ["attachmentable_id", "attachmentable_type"], name: "index_attachments_on_attachmentable_id_and_attachmentable_type"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -30,7 +39,7 @@ ActiveRecord::Schema.define(version: 20170817095910) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -51,6 +60,4 @@ ActiveRecord::Schema.define(version: 20170817095910) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "answers", "users"
-  add_foreign_key "questions", "users"
 end
