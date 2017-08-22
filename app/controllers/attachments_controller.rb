@@ -2,9 +2,9 @@ class AttachmentsController < ApplicationController
   def destroy
     if current_user.author_of?(attachment.attachmentable)
       attachment.destroy
-      flash[:notice] = 'Attachment destroied'
+      flash.now[:notice] = 'Attachment destroied'
     else
-      flash[:alert] = 'You dont have priveleges'
+      flash.now[:alert] = 'You dont have priveleges'
     end
   end
 

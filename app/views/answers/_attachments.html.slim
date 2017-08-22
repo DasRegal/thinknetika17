@@ -1,7 +1,0 @@
-p Attachments:
-ul
-  -answer.attachments.each do |a|
-    .attachment data-id=a.id
-      li =link_to a.file.file.filename, a.file.url
-      -if current_user.author_of?(answer)
-        li =link_to 'delete attach', destroy_attachment_path(a), method: :delete, remote: true
