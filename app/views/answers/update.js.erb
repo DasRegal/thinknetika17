@@ -7,4 +7,5 @@ $('.validation_errors').val('');
   $(".answer_body[data-answer-id='<%= @answer.id.to_s %>']").html('<%= j @answer.body %>');
   $("#edit_answer_form_"+<%= @answer.id %>).hide();
   $(".edit_answer_link[data-edit-answer-link-id=<%= @answer.id %>]").show();
+  $('.q_attachments_container ').html('<%= j render "share/attachments", obj: @answer %>')
 <% end %>
