@@ -3,38 +3,52 @@
     -@answer.errors.full_messages.each do |msg|
       p =msg
 div 
-  p.question_title =@question.title
-  p.question_body =@question.body
+  .container
+    .col-lg-6
+      p.question_title.h2 =@question.title
+  .container
+    .col-lg-6
+      p.question_body =@question.body
+    -if current_user&.author_of?(@question)
+      p =link_to 'delete question', question_path(@question), method: :delete
+      p =link_to 'Edit question','', class: 'edit_question_link'
+      .edit_question_form 
+        =form_for @question, remote: true, method: :patch  do |f|
+          .container
+            .form-group.col-lg-6
+              =f.label :title, 'new title'
+              =f.text_field :title, class: 'form-control'
+          .container
+            .form-group.col-lg-6
+              =f.label :body, 'new body'
+              =f.text_area :body, class: 'form-control', rows: 5
+          .container
+            .col-lg-6.form-group
+              =f.fields_for :attachments do |attach|
+                p= render 'share/attachment_fields', f: attach
+                p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
+              .form-group
+                =f.submit 'Save', class: 'btn btn-primary'
   div.q_attachments_wrapper
-    p Attachments:
     ul.q_attachments_container
       = render 'share/attachments', obj: @question
-
-  -if current_user&.author_of?(@question)
-    =link_to 'delete question', question_path(@question), method: :delete
-    br
-    =link_to 'Edit question','', class: 'edit_question_link'
-    .edit_question_form 
-      =form_for @question, remote: true, method: :patch  do |f|
-        =f.label :body, 'new body'
-        =f.text_area :body
-        =f.label :title, 'new title'
-        =f.text_area :title
-        p 
-        =f.fields_for :attachments do |attach|
-          p= render 'share/attachment_fields', f: attach
-          p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
-        =f.submit 'Save'      
+  .container
+    p.h4 Answers:
+    hr.col-lg-8
   .answers_container
     =render @question.answers.order(is_best: :desc , created_at: :asc)
 
 -if current_user
-  =form_for [@question, @answer], method: :post, remote: true do |f| 
-    =f.label :body, 'Your answer'
-    =f.text_area :body
-    br
-    p 
-      =f.fields_for :attachments do |attach|
-        p= render 'share/attachment_fields', f: attach
-        p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
-    =f.submit 'Add answer'
+  .container
+    =form_for [@question, @answer], method: :post, remote: true do |f| 
+      .row
+        .col-lg-6.form-group
+          =f.label :body, 'Your answer'
+          =f.text_area :body,class: 'form-control', rows: 5
+      .row
+        .col-lg-6
+          =f.fields_for :attachments do |attach|
+            p= render 'share/attachment_fields', f: attach
+            p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
+      .row
+        =f.submit 'Add answer', class: 'btn btn-primary'
