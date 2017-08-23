@@ -74,3 +74,5 @@ gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
 gem "twitter-bootstrap-rails"
+gem 'pry'
+gem 'pry-rails'
