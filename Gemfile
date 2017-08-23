@@ -73,3 +73,4 @@ gem 'jquery-ui-rails'
 gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
+gem "twitter-bootstrap-rails"
