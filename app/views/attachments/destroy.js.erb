@@ -1,5 +1,4 @@
-$('.alert').html("<%=  alert %>");
-$('.notice').html("<%=  notice %>");
+$('.noty_wrapper').html("<%= j render 'share/noty' %>")
 <% unless alert %>
 $('.attachment[data-id=<%= @attachment.id %>]').remove();
 <% end %>

@@ -31,11 +31,8 @@ html lang="en"
     .container
       .row
         .col-lg-9
-          .notice
-            = notice
-          .alert
-            = alert
-          = bootstrap_flash
+          .noty_wrapper
+            = bootstrap_flash
           = yield
         .col-lg-3
           .well.sidebar-nav

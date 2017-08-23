@@ -1,4 +1,3 @@
-$('.alert').html("<%=  alert %>");
-$('.notice').html("<%=  notice %>");
+$('.noty_wrapper').html("<%= j render 'share/noty' %>")
 $('.answer').removeClass('best_answer');
 $('.answer[data-answer-id=<%= @answer.id%>]').addClass('best_answer');
