@@ -1,5 +1,4 @@
-$('.alert').html("<%=  alert %>");
-$('.notice').html("<%=  notice %>");
+$('.noty_wrapper').html("<%= j render 'share/noty' %>")
 $('.validation_errors').val('');
 <% if @answer.errors.present? %>
   $('.validation_errors').html("<%= @answer.errors.full_messages.join('<br') %>");
