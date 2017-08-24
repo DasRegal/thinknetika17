@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include Voted
+  
   before_action :authenticate_user!, only: [:create, :destroy, :update, :set_as_best]
 
   def edit

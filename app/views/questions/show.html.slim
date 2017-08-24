@@ -5,6 +5,12 @@
 div 
   .container
     .col-lg-6
+      p.total_votes data-id=@question.id 
+        =@question.votes.total_count
+      p.vote_up 
+        =link_to 'vote_up', vote_up_question_path(@question), method: :post, remote: true
+      p.vote_down 
+        =link_to 'vote_down', vote_down_question_path(@question), method: :post, remote: true
       p.question_title.h2 =@question.title
   .container
     .col-lg-6
@@ -35,7 +41,7 @@ div
   .container
     p.h4 Answers:
     hr.col-lg-8
-  .answers_container
+  .answers_container    
     =render @question.answers.order(is_best: :desc , created_at: :asc)
 
 -if current_user

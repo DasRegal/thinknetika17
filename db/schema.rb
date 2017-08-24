@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20170824090106) do
     t.integer "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.boolean "is_best", default: false
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20170824090106) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -64,12 +64,11 @@ ActiveRecord::Schema.define(version: 20170824090106) do
     t.bigint "user_id"
     t.string "voteable_type"
     t.integer "voteable_id"
+    t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_votes_on_user_id"
     t.index ["voteable_id", "voteable_type"], name: "index_votes_on_voteable_id_and_voteable_type"
   end
 
-  add_foreign_key "answers", "users"
-  add_foreign_key "questions", "users"
 end

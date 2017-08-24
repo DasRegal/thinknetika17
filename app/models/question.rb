@@ -1,7 +1,8 @@
 class Question < ApplicationRecord
+  include Votable
+  
   has_many :answers, dependent: :destroy
   has_many :attachments, as: :attachmentable, dependent: :destroy
-  has_many :votes, as: :voteable, dependent: :destroy
   belongs_to :user
   
   validates :title, :body, presence: true
