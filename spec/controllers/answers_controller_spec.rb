@@ -218,4 +218,15 @@ let(:invalid_answer) { create(:invalid_answer) }
       end
     end 
   end
+
+  describe 'PATCH #vote_up' do 
+  end
+
+  describe 'PATCH #vote_down' do 
+  end
+
+  describe 'DELETE #vote_delete' do 
+  end
+
+
 end

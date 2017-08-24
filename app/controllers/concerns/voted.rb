@@ -2,7 +2,7 @@ module Voted
   extend ActiveSupport::Concern
 
   included do 
-    before_action :set_obj, only: [:vote_up, :vote_down]
+    before_action :set_obj, only: [:vote_up, :vote_down, :vote_delete]
   end
 
   def vote_up
@@ -12,6 +12,11 @@ module Voted
 
   def vote_down
     @obj.vote(current_user, 'down')
+    render json: @obj.votes.total_count
+  end
+
+  def vote_delete
+    @obj.votes.where(user: current_user).destroy_all
     render json: @obj.votes.total_count
   end
 

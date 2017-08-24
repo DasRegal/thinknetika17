@@ -195,4 +195,33 @@ let(:questions) { create_list(:question,2) }
       end      
     end
   end
+
+  describe 'PATCH #vote_up' do 
+    sign_in_user
+    context 'non question author try to vote up' do 
+      context 'user already has vote' do 
+        it 'delete all users votes from question'
+        it 'create a new vote'
+        it 'render total count of votes'
+      end
+
+      context 'user dont has vote' do 
+        it 'create a new vote'
+        it 'render total count of votes'
+      end
+    end
+
+    context 'question author try to vote up' do 
+      it 'dont change votes'
+      it 'response status 422'
+      it 'render error text'
+    end
+  end
+
+  describe 'PATCH #vote_down' do 
+  end
+
+  describe 'DELETE #vote_delete' do 
+  end
+
 end

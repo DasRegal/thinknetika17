@@ -4,10 +4,12 @@
       p.total_votes data-id=answer.id 
         =answer.votes.total_count
       -if current_user
-        p.vote_up 
+        p.vote_up.vote 
           =link_to 'vote_up', vote_up_question_answer_path(@question, answer), method: :post, remote: true
-        p.vote_down 
+        p.vote_down.vote 
           =link_to 'vote_down', vote_down_question_answer_path(@question, answer), method: :post, remote: true
+        p.vote_delete.vote
+          =link_to 'vote_delete', vote_delete_question_answer_path(@question, answer), method: :delete, remote: true
       .answer_body.col-lg-6 data={answer_id:answer.id} 
         p=answer.body
       ul.a_attachments_container
