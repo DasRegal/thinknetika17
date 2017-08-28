@@ -6,13 +6,21 @@ module Voted
   end
 
   def vote_up
-    @obj.vote(current_user, 'up')
-    render json: @obj.votes.total_count
+    if @obj.vote?(current_user, 'up')
+      render json: 'You are already voted up', status: :unprocessable_entity
+    else
+      @obj.vote(current_user, 'up')
+      render json: @obj.votes.total_count
+    end
   end
 
   def vote_down
-    @obj.vote(current_user, 'down')
-    render json: @obj.votes.total_count
+    if @obj.vote?(current_user, 'down')
+      render json: 'You are already voted down', status: :unprocessable_entity
+    else
+      @obj.vote(current_user, 'down')
+      render json: @obj.votes.total_count
+    end
   end
 
   def vote_delete

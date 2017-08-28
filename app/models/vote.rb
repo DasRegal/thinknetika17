@@ -1,6 +1,6 @@
 class Vote < ApplicationRecord
   belongs_to :voteable, polymorphic: true
-  belongs_to :user 
+  belongs_to :user
 
   scope :ups, -> { where(status: 'up') }
   scope :downs, -> { where(status: 'down') }
@@ -9,3 +9,4 @@ class Vote < ApplicationRecord
     self.ups.count - self.downs.count
   end
 end
+

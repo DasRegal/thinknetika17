@@ -3,7 +3,7 @@
     .row
       p.total_votes data-id=answer.id 
         =answer.votes.total_count
-      -if current_user
+      -if current_user && !current_user.author_of?(answer)
         p.vote_up.vote 
           =link_to 'vote_up', vote_up_question_answer_path(@question, answer), method: :post, remote: true
         p.vote_down.vote 
