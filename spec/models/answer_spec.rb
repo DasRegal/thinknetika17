@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+  let!(:answer) { create(:answer) }
+  let!(:user) { create(:user) }
+  let!(:vote_up) { create(:vote, :up, user: user, voteable: answer) }
+  let(:answer2) { create(:answer) }
+
   it { should belong_to :question }
   it { should belong_to :user }
   it { should have_many(:attachments).dependent(:destroy) }
@@ -25,6 +30,23 @@ RSpec.describe Answer, type: :model do
       answer = @question.answers.first
       answer.set_best
       expect(answer.is_best?).to eq true
+    end
+  end
+
+  context '.vote?' do 
+    it 'return true if user has vote in this obj' do 
+      expect(answer.vote?(user, 1)).to eq true
+    end
+
+    it 'return false if user dont has vote in this obj ' do
+      expect(answer2.vote?(user, 1)).to eq false 
+    end
+  end
+
+  context '.vote' do 
+    it 'have only new vote' do 
+      new_vote = answer.vote(user, -1)
+      expect(answer.votes).to match_array(new_vote)
     end
   end
 end
