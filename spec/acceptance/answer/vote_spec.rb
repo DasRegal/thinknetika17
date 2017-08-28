@@ -88,7 +88,7 @@ feature 'voting answers', %q{
       sign_in user
     end
 
-    scenario 'voted up' do 
+    scenario 'voted up', js: true do 
       vote_up =  create(:vote_up, user: user, voteable: answer)       
       visit question_path(question)
       within '.answers_container' do 
@@ -100,7 +100,7 @@ feature 'voting answers', %q{
       expect(page).to have_content 'You are already voted up'
     end
 
-    scenario 'voted down' do 
+    scenario 'voted down', js: true do 
       vote_down =  create(:vote_down, user: user, voteable: answer)       
       visit question_path(question)
       within '.answers_container' do 
