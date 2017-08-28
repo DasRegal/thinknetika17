@@ -6,15 +6,7 @@ div
   .container
     .col-lg-6
       .question_vote_nav
-        p.total_votes data-id=@question.id 
-          =@question.votes.total_count
-        -if current_user && !current_user.author_of?(@question)
-          p.vote_up.vote 
-            =link_to 'vote_up', vote_up_question_path(@question), method: :post, remote: true
-          p.vote_down.vote 
-            =link_to 'vote_down', vote_down_question_path(@question), method: :post, remote: true
-          p.vote_delete.vote 
-            =link_to 'vote_delete', vote_delete_question_path(@question), method: :delete, remote: true
+        =render 'share/vote_nav', obj: @question
       p.question_title.h2 =@question.title
   .container
     .col-lg-6

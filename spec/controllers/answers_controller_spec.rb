@@ -5,6 +5,7 @@ let!(:question) { create(:question) }
 let(:question_with_answers) { create(:question_with_answers) }
 let(:answer) { create(:answer) }
 let(:invalid_answer) { create(:invalid_answer) }
+let(:user) { create(:user) }
 
   describe 'GET #edit' do
     before { get :edit, params: { id: question_with_answers.answers.first, question_id: question_with_answers } }
@@ -334,7 +335,12 @@ let(:invalid_answer) { create(:invalid_answer) }
     end
 
     context 'user dont has votes' do 
-      it 'do nothing' do 
+      before do
+        create(:vote, :down, user: user, voteable: answer) 
+        answer.update(question: question)
+      end
+      it 'votes dont changes' do 
+        expect { delete :vote_delete, params: { question_id: question, id: answer } }.to_not change(answer.votes, :total_count)
       end
     end
   end

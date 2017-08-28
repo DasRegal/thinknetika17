@@ -47,9 +47,8 @@ feature 'voting question', %q{
   end
 
   describe 'user can revote' do 
-    before do 
-      sign_in user
-    end
+    before { sign_in user }
+
     scenario 'from up to down', js: true do 
       vote_up =  create(:vote, :up, user: user, voteable: question) 
       visit question_path(question)
@@ -70,9 +69,7 @@ feature 'voting question', %q{
   end
 
   describe 'user already voted' do 
-    before do 
-      sign_in user
-    end
+    before { sign_in user }
 
     scenario 'voted up', js: true do 
       vote_up =  create(:vote, :up, user: user, voteable: question) 

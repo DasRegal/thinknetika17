@@ -4,9 +4,6 @@ class Vote < ApplicationRecord
 
   validates :status, presence: true
 
-  scope :ups, -> { where(status: 'up') }
-  scope :downs, -> { where(status: 'down') }
-
   def self.total_count
     self.sum(:status)
   end

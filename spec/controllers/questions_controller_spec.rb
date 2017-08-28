@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
 let(:question) { create(:question) }
 let(:questions) { create_list(:question,2) }
+let(:user) { create(:user) }
 
   describe 'GET #index' do
     before do 
@@ -307,7 +308,11 @@ let(:questions) { create_list(:question,2) }
     end
 
     context 'user dont has votes' do 
-      it 'do nothing' do 
+      before do
+        create(:vote, :down, user: user, voteable: question) 
+      end
+      it 'votes dont change' do 
+        expect { delete :vote_delete, params: { id: question } }.to_not change(question.votes, :total_count)
       end
     end
   end

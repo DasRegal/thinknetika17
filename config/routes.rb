@@ -9,11 +9,13 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :questions, concerns: [:voteable] do 
-    resources :answers, concerns: [:voteable] do 
+    resources :answers do 
       patch 'set_as_best', on: :member
     end
   end
 
+  resources :answers, concerns: [:voteable], only: [:vote_up, :vote_down, :vote_delete]
+  
   delete '/attachment/:id', to: 'attachments#destroy', as: :destroy_attachment
 
   root to: 'questions#index'

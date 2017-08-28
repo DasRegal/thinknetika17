@@ -1,0 +1,9 @@
+p.total_votes data-id=obj.id 
+  =obj.votes.total_count
+-if current_user && !current_user.author_of?(obj)
+  p.vote_up.vote 
+    =link_to 'vote_up', polymorphic_path([:vote_up, obj]), method: :post, remote: true
+  p.vote_down.vote 
+    =link_to 'vote_down', polymorphic_path([:vote_down, obj]), method: :post, remote: true
+  p.vote_delete.vote 
+    =link_to 'vote_delete', polymorphic_path([:vote_delete, obj]), method: :delete, remote: true

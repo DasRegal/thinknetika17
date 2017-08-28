@@ -27,9 +27,16 @@ RSpec.describe Question, type: :model do
   end
 
   context '.vote' do 
-    it 'have only new vote' do 
-      new_vote = question.vote(user, -1)
-      expect(question.votes).to match_array(new_vote)
+    it 'change votes count' do 
+      expect{ question2.vote(user, -1) }.to change(Vote, :count).by 1
     end
+    it 'created vote have correct params' do
+      new_vote = question2.vote(user, -1)
+      expect(new_vote.voteable_id).to eq question2.id
+      expect(new_vote.voteable_type).to eq 'Question'
+      expect(new_vote.user_id).to eq user.id
+      expect(new_vote.status).to eq -1
+    end
+
   end
 end
