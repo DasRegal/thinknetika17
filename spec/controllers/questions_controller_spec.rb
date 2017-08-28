@@ -201,7 +201,7 @@ let(:questions) { create_list(:question,2) }
     context 'non question author try to vote up' do 
       context 'user already has vote' do 
         before do 
-            create(:vote_up, user: @user, voteable: question)
+            create(:vote, :up, user: @user, voteable: question)
         end
 
         it 'dont change votes' do 
@@ -251,7 +251,7 @@ let(:questions) { create_list(:question,2) }
     context 'non question author try to vote down' do 
       context 'user already has vote' do 
         before do 
-            create(:vote_down, user: @user, voteable: question)
+            create(:vote, :down, user: @user, voteable: question)
         end
 
         it 'dont change votes' do 
@@ -300,7 +300,7 @@ let(:questions) { create_list(:question,2) }
   describe 'DELETE #vote_delete' do 
     sign_in_user
     context 'user has votes' do 
-      before { create(:vote_down, user: @user, voteable: question) }
+      before { create(:vote, :down, user: @user, voteable: question) }
       it 'change votes count' do 
         expect { delete :vote_delete, params: { id: question } }.to change(question.votes, :count).by -1
       end

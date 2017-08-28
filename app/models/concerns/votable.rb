@@ -6,11 +6,7 @@ module Votable
   end
 
   def vote?(user, status)
-    if self.votes.where(user: user, status: status).count > 0 
-      return true
-    else
-      return false
-    end
+    self.votes.where(user: user, status: status).count > 0 
   end
 
 

@@ -224,7 +224,7 @@ let(:invalid_answer) { create(:invalid_answer) }
     context 'non answer author try to vote up' do 
       context 'user already has vote' do 
         before do 
-          create(:vote_up, user: @user, voteable: answer)
+          create(:vote, :up, user: @user, voteable: answer)
           answer.update(question: question)
         end
 
@@ -275,7 +275,7 @@ let(:invalid_answer) { create(:invalid_answer) }
     context 'non answer author try to vote down' do 
       context 'user already has vote' do 
         before do 
-          create(:vote_down, user: @user, voteable: answer)
+          create(:vote, :down, user: @user, voteable: answer)
           answer.update(question: question)
         end
 
@@ -325,7 +325,7 @@ let(:invalid_answer) { create(:invalid_answer) }
     sign_in_user
     context 'user has votes' do 
       before do
-        create(:vote_down, user: @user, voteable: answer) 
+        create(:vote, :down, user: @user, voteable: answer) 
         answer.update(question: question)
       end
       it 'change votes count' do 

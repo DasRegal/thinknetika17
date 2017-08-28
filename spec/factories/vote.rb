@@ -1,13 +1,14 @@
 FactoryGirl.define do  
-  factory :vote_up, class: 'Vote' do 
-    self.voteable { |a| a.association :obj }
-    status 'up'
-    user
-  end
+  factory :vote, class: 'Vote' do
+   self.voteable { |a| a.association :obj }
+   user
 
-  factory :vote_down, class: 'Vote' do
-    self.voteable { |a| a.association :obj }
-    status 'down'
-    user
+   trait :up do 
+    status 1
+   end
+
+   trait :down do 
+    status -1
+   end
   end
 end

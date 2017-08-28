@@ -8,7 +8,7 @@ class Vote < ApplicationRecord
   scope :downs, -> { where(status: 'down') }
 
   def self.total_count
-    self.ups.count - self.downs.count
+    self.sum(:status)
   end
 end
 

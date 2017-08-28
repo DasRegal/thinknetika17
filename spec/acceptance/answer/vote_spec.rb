@@ -61,7 +61,7 @@ feature 'voting answers', %q{
       sign_in user
     end
     scenario 'from up to down', js: true do 
-      vote_up =  create(:vote_up, user: user, voteable: answer) 
+      vote_up =  create(:vote, :up, user: user, voteable: answer) 
       visit question_path(question)
       within '.answers_container' do 
         old_votes = find(".total_votes").text.to_i  
@@ -72,7 +72,7 @@ feature 'voting answers', %q{
     end
 
     scenario 'from down to up', js: true do 
-      vote_down =  create(:vote_down, user: user, voteable: answer) 
+      vote_down =  create(:vote, :down, user: user, voteable: answer) 
       visit question_path(question)
       within '.answers_container' do 
         old_votes = find(".total_votes").text.to_i  
@@ -89,7 +89,7 @@ feature 'voting answers', %q{
     end
 
     scenario 'voted up', js: true do 
-      vote_up =  create(:vote_up, user: user, voteable: answer)       
+      vote_up =  create(:vote, :up, user: user, voteable: answer)       
       visit question_path(question)
       within '.answers_container' do 
         old_votes = find(".total_votes").text.to_i  
@@ -101,7 +101,7 @@ feature 'voting answers', %q{
     end
 
     scenario 'voted down', js: true do 
-      vote_down =  create(:vote_down, user: user, voteable: answer)       
+      vote_down =  create(:vote, :down, user: user, voteable: answer)       
       visit question_path(question)
       within '.answers_container' do 
         old_votes = find(".total_votes").text.to_i  

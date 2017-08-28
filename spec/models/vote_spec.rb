@@ -9,16 +9,16 @@ RSpec.describe Vote, type: :model do
     before do 
       @user = create(:user)
       @question = create(:question)
-      vote_up = create(:vote_up, user: @user, voteable: @question)
+      vote_up = create(:vote, :up, user: @user, voteable: @question)
       @question2 = create(:question)
     end
 
     it 'return true if user has vote in this obj' do 
-      expect(@question.vote?(@user, 'up')).to eq true
+      expect(@question.vote?(@user, 1)).to eq true
     end
 
     it 'return false if user dont has vote in this obj ' do
-      expect(@question2.vote?(@user, 'up')).to eq false 
+      expect(@question2.vote?(@user, 1)).to eq false 
     end
   end
 
@@ -26,9 +26,9 @@ RSpec.describe Vote, type: :model do
     before do 
       @user = create(:user)
       @question = create(:question)
-      @vote_up = create(:vote_up, user: @user, voteable: @question)
+      @vote_up = create(:vote, :up, user: @user, voteable: @question)
       @question2 = create(:question)
-      @question.vote(@user, 'down')
+      @question.vote(@user, -1)
     end
 
     it 'destroy all votes on this obj on this user' do 
