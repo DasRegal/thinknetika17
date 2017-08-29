@@ -76,3 +76,5 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
   end
 end
+
+Dir["./spec/shared/**/*.rb"].sort.each { |f| require f }

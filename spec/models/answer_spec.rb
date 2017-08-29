@@ -31,27 +31,6 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  context '.vote?' do 
-    it 'return true if user has vote in this obj' do 
-      expect(answer.vote?(user, 1)).to eq true
-    end
+  it_behaves_like 'voteable'
 
-    it 'return false if user dont has vote in this obj ' do
-      expect(answer2.vote?(user, 1)).to eq false 
-    end
-  end
-
-  context '.vote' do 
-    it 'change votes count' do 
-      expect{ answer2.vote(user, -1) }.to change(Vote, :count).by 1
-    end
-
-    it 'created vote have correct params' do
-      new_vote = answer2.vote(user, -1)
-
-      expect(new_vote.voteable).to eq answer2
-      expect(new_vote.user_id).to eq user.id
-      expect(new_vote.status).to eq -1
-    end
-  end
 end
