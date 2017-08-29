@@ -1,6 +1,8 @@
 -if answer.persisted?
   .answer.container data={answer_id:answer.id} class=(answer.is_best ? 'best_answer' : '')
     .row
+      .answer_vote_nav
+        =render 'share/vote_nav', obj: answer
       .answer_body.col-lg-6 data={answer_id:answer.id} 
         p=answer.body
       ul.a_attachments_container

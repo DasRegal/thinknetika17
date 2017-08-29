@@ -3,11 +3,10 @@ require 'rails_helper'
 RSpec.describe QuestionsController, type: :controller do
 let(:question) { create(:question) }
 let(:questions) { create_list(:question,2) }
+let(:user) { create(:user) }
 
   describe 'GET #index' do
-    before do 
-      get :index      
-    end
+    before { get :index }
 
     it 'populates an array of all questions' do
       expect(assigns(:questions)).to match_array(questions)
@@ -19,9 +18,7 @@ let(:questions) { create_list(:question,2) }
   end
 
   describe 'GET #show' do
-    before do 
-      get :show, params: { id: question }
-    end
+    before { get :show, params: { id: question } }
 
     it 'assigns the requested question to @question' do 
       expect(assigns(:question)).to eq question
@@ -60,9 +57,7 @@ let(:questions) { create_list(:question,2) }
 
   describe 'GET #edit' do
     sign_in_user
-    before do 
-      get :edit, params: { id: question }
-    end
+    before { get :edit, params: { id: question } }
 
     it 'assigns the requested question to @question' do 
       expect(assigns(:question)).to eq question
@@ -193,6 +188,119 @@ let(:questions) { create_list(:question,2) }
         delete :destroy, params: { id: question }
         expect(response).to render_template :show
       end      
+    end
+  end
+
+  describe 'PATCH #vote_up' do 
+    sign_in_user
+    context 'non question author try to vote up' do 
+      context 'user already has vote' do 
+        before { create(:vote, :up, user: @user, voteable: question) }
+
+        it 'dont change votes' do 
+          expect{ patch :vote_up, params: { id:question } }.to_not change(question.votes, :count)
+        end
+
+        it 'render error' do 
+          patch :vote_up, params: { id:question }
+          expect(response.body).to eq 'You are already voted up'
+        end
+
+        it 'response status 422' do 
+          patch :vote_up, params: { id:question }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
+      context 'user dont has vote' do 
+        it 'create a new vote' do 
+          expect{ patch :vote_up, params: { id:question } }.to change(question.votes, :total_count).by 1
+        end
+
+        it 'render total count of votes' do 
+          patch :vote_up, params: { id:question }
+          expect(response.body). to eq question.votes.total_count.to_s
+        end
+      end
+    end
+
+    context 'question author try to vote up' do 
+      before { question.update(user: @user) }
+
+      it 'dont change votes' do 
+        expect{ patch :vote_up, params: { id:question } }.to_not change(question.votes, :total_count)
+      end
+
+      it 'response status 422' do 
+        patch :vote_up, params: { id:question }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe 'PATCH #vote_down' do 
+    sign_in_user
+    context 'non question author try to vote down' do 
+      context 'user already has vote' do 
+        before { create(:vote, :down, user: @user, voteable: question) }
+
+        it 'dont change votes' do 
+          expect{ patch :vote_down, params: { id:question } }.to_not change(question.votes, :total_count)
+        end
+
+        it 'render error' do 
+          patch :vote_down, params: { id:question }
+          expect(response.body).to eq 'You are already voted down'
+        end
+
+        it 'response status 422' do 
+          patch :vote_down, params: { id:question }
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+      end
+
+      context 'user dont has vote' do 
+        it 'create a new vote' do 
+          expect{ patch :vote_down, params: { id:question } }.to change(question.votes, :total_count).by -1
+        end
+
+        it 'render total count of votes' do 
+          patch :vote_down, params: { id:question }
+          expect(response.body). to eq question.votes.total_count.to_s
+        end
+      end
+    end
+
+    context 'question author try to vote down' do 
+      before { question.update(user: @user) }
+
+      it 'dont change votes' do 
+        expect{ patch :vote_down, params: { id:question } }.to_not change(question.votes, :total_count)
+      end
+
+      it 'response status 422' do 
+        patch :vote_down, params: { id:question }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe 'DELETE #vote_delete' do 
+    sign_in_user
+    context 'user has votes' do 
+      before { create(:vote, :down, user: @user, voteable: question) }
+      
+      it 'change votes count' do 
+        expect { delete :vote_delete, params: { id: question } }.to change(question.votes, :count).by -1
+      end
+    end
+
+    context 'user dont has votes' do 
+      before { create(:vote, :down, user: user, voteable: question) }
+
+      it 'votes dont change' do 
+        expect { delete :vote_delete, params: { id: question } }.to_not change(question.votes, :total_count)
+      end
     end
   end
 end
