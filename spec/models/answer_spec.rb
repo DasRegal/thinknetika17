@@ -15,9 +15,7 @@ RSpec.describe Answer, type: :model do
   it { should accept_nested_attributes_for :attachments }
   
   context 'setting answer to be best' do 
-    before do 
-      @question = create :question_with_answers
-    end
+    before { @question = create :question_with_answers }
 
     it 'have only 1 best answer' do 
       @question.answers.each do |a|
@@ -47,10 +45,11 @@ RSpec.describe Answer, type: :model do
     it 'change votes count' do 
       expect{ answer2.vote(user, -1) }.to change(Vote, :count).by 1
     end
+
     it 'created vote have correct params' do
       new_vote = answer2.vote(user, -1)
-      expect(new_vote.voteable_id).to eq answer2.id
-      expect(new_vote.voteable_type).to eq 'Answer'
+
+      expect(new_vote.voteable).to eq answer2
       expect(new_vote.user_id).to eq user.id
       expect(new_vote.status).to eq -1
     end

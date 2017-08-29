@@ -257,9 +257,7 @@ let(:user) { create(:user) }
     end
 
     context 'answer author try to vote up' do 
-      before do 
-        answer.update(user: @user, question: question)
-      end
+      before { answer.update(user: @user, question: question) }
       it 'dont change votes' do 
         expect{ patch :vote_up, params: {question_id: question,  id: answer } }.to_not change(answer.votes, :total_count)
       end
@@ -308,9 +306,8 @@ let(:user) { create(:user) }
     end
 
     context 'answer author try to vote down' do 
-      before do 
-        answer.update(user: @user, question: question)
-      end
+      before { answer.update(user: @user, question: question) }
+
       it 'dont change votes' do 
         expect{ patch :vote_down, params: {question_id: question,  id: answer } }.to_not change(answer.votes, :total_count)
       end
@@ -329,6 +326,7 @@ let(:user) { create(:user) }
         create(:vote, :down, user: @user, voteable: answer) 
         answer.update(question: question)
       end
+      
       it 'change votes count' do 
         expect { delete :vote_delete, params: { question_id: question, id: answer } }.to change(answer.votes, :count).by -1
       end
@@ -339,6 +337,7 @@ let(:user) { create(:user) }
         create(:vote, :down, user: user, voteable: answer) 
         answer.update(question: question)
       end
+
       it 'votes dont changes' do 
         expect { delete :vote_delete, params: { question_id: question, id: answer } }.to_not change(answer.votes, :total_count)
       end

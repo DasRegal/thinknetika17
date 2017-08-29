@@ -6,9 +6,7 @@ let(:questions) { create_list(:question,2) }
 let(:user) { create(:user) }
 
   describe 'GET #index' do
-    before do 
-      get :index      
-    end
+    before { get :index }
 
     it 'populates an array of all questions' do
       expect(assigns(:questions)).to match_array(questions)
@@ -20,9 +18,7 @@ let(:user) { create(:user) }
   end
 
   describe 'GET #show' do
-    before do 
-      get :show, params: { id: question }
-    end
+    before { get :show, params: { id: question } }
 
     it 'assigns the requested question to @question' do 
       expect(assigns(:question)).to eq question
@@ -61,9 +57,7 @@ let(:user) { create(:user) }
 
   describe 'GET #edit' do
     sign_in_user
-    before do 
-      get :edit, params: { id: question }
-    end
+    before { get :edit, params: { id: question } }
 
     it 'assigns the requested question to @question' do 
       expect(assigns(:question)).to eq question
@@ -201,9 +195,7 @@ let(:user) { create(:user) }
     sign_in_user
     context 'non question author try to vote up' do 
       context 'user already has vote' do 
-        before do 
-            create(:vote, :up, user: @user, voteable: question)
-        end
+        before { create(:vote, :up, user: @user, voteable: question) }
 
         it 'dont change votes' do 
           expect{ patch :vote_up, params: { id:question } }.to_not change(question.votes, :count)
@@ -233,9 +225,8 @@ let(:user) { create(:user) }
     end
 
     context 'question author try to vote up' do 
-      before do 
-        question.update(user: @user)
-      end
+      before { question.update(user: @user) }
+
       it 'dont change votes' do 
         expect{ patch :vote_up, params: { id:question } }.to_not change(question.votes, :total_count)
       end
@@ -251,9 +242,7 @@ let(:user) { create(:user) }
     sign_in_user
     context 'non question author try to vote down' do 
       context 'user already has vote' do 
-        before do 
-            create(:vote, :down, user: @user, voteable: question)
-        end
+        before { create(:vote, :down, user: @user, voteable: question) }
 
         it 'dont change votes' do 
           expect{ patch :vote_down, params: { id:question } }.to_not change(question.votes, :total_count)
@@ -283,9 +272,7 @@ let(:user) { create(:user) }
     end
 
     context 'question author try to vote down' do 
-      before do 
-        question.update(user: @user)
-      end
+      before { question.update(user: @user) }
 
       it 'dont change votes' do 
         expect{ patch :vote_down, params: { id:question } }.to_not change(question.votes, :total_count)
@@ -302,15 +289,15 @@ let(:user) { create(:user) }
     sign_in_user
     context 'user has votes' do 
       before { create(:vote, :down, user: @user, voteable: question) }
+      
       it 'change votes count' do 
         expect { delete :vote_delete, params: { id: question } }.to change(question.votes, :count).by -1
       end
     end
 
     context 'user dont has votes' do 
-      before do
-        create(:vote, :down, user: user, voteable: question) 
-      end
+      before { create(:vote, :down, user: user, voteable: question) }
+
       it 'votes dont change' do 
         expect { delete :vote_delete, params: { id: question } }.to_not change(question.votes, :total_count)
       end
