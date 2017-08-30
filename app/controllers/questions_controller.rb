@@ -10,6 +10,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    gon.question_id = @question.id
     @answer = @question.answers.new
     @answer.attachments.build
     # coccon не билдит аттачменты если их нет, поэтому не появляется форма
@@ -71,7 +72,7 @@ class QuestionsController < ApplicationController
     return if @question.errors.any?
     ActionCable.server.broadcast(
       'questions',
-       ApplicationController.render(
+      ApplicationController.render(
         partial: 'questions/question',
         locals: { question: @question }
       )

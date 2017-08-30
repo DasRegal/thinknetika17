@@ -3,6 +3,8 @@ class AnswersController < ApplicationController
   
   before_action :authenticate_user!, only: [:create, :destroy, :update, :set_as_best]
 
+  after_action :publish_answer, only: [:create]
+
   def edit
     answer
   end
@@ -59,5 +61,13 @@ class AnswersController < ApplicationController
 
   def question
     @question ||= Question.find(params[:question_id])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    ActionCable.server.broadcast(
+      "question_#{@question.id}",
+       @answer.to_json  
+      )    
   end
 end
