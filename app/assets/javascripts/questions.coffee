@@ -11,3 +11,14 @@ question_ready =  ->
 
 $(document).ready(question_ready) # "вешаем" функцию ready на событие document.ready
 $(document).on('turbolinks:load', question_ready)  # "вешаем" функцию ready на событие page:load
+
+$ ->
+  App.cable.subscriptions.create('QuestionsChannel',{
+    connected: ->
+      console.log 'Connected'
+      @perform 'follow'
+    ,
+
+    received: (data) ->
+      $('.questions_wrapper').append data
+  })
