@@ -67,7 +67,13 @@ class AnswersController < ApplicationController
     return if @answer.errors.any?
     ActionCable.server.broadcast(
       "question_#{@question.id}",
-       @answer.to_json  
+       {answer: { id: @answer.id,
+                  body: @answer.body,
+                  user_id: @answer.user_id },
+        attachments: @answer.
+          attachments.
+          collect{|aa| { id: aa.id, url: aa.file.url, file_name: aa.file.file.filename } }
+        }.to_json
       )    
   end
 end

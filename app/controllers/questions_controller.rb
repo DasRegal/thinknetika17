@@ -10,7 +10,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    gon.question_id = @question.id
+    gon.question = @question
     @answer = @question.answers.new
     @answer.attachments.build
     # coccon не билдит аттачменты если их нет, поэтому не появляется форма

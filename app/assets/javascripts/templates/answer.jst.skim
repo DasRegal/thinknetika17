@@ -1,0 +1,23 @@
+.answer.container data-answer_id=@answer.id
+  .row
+    .answer_vote_nav
+      p.total_votes data-id=@answer.id 
+        ="0"
+      -if gon.current_user && !@answer.user_id == gon.current_user.id
+        p.vote_up.vote 
+          a href="/answers/#{@answer.id}/vote_up" data-method='post' data-remote='true' rel='nofollow' vote_up
+        p.vote_down.vote 
+          a href="/answers/#{@answer.id}/vote_down" data-method='post' data-remote='true' rel='nofollow' vote_down
+        p.vote_delete.vote 
+          a href="/answers/#{@answer.id}/vote_up" data-method='delete' data-remote='true' rel='nofollow' vote_delete
+    .answer_body.col-lg-6 
+      p=@answer.body
+    ul.a_attachments_container
+      - for attachment in @attachments
+        ==JST['templates/attachment'] attachment: attachment
+    .links.col-lg-4
+      -if gon.current_user.id == gon.question.user_id
+        p 
+          a href="/questions/#{gon.question.id}/answers/#{@answer.id}/set_as_best" data-method='patch' data-remote='true' rel='nofollow' Mark as best
+  .row
+    hr.col-lg-8

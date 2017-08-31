@@ -12,27 +12,28 @@ answer_ready =  ->
   $('.answers_container').on 'click', '.delete_answer', (e) -> 
     id = $(this).data('answerId')
 
+
 answers_subscript = ->
-  if gon.question_id 
+  if gon.question 
     if (App.answers_sub) 
       App.cable.subscriptions.remove(App.answers_sub)
     App.answers_sub = App.cable.subscriptions.create({
       channel: 'AnswersChannel', 
-      question_id: gon.question_id
+      question_id: gon.question.id
     },{
       connected: ->
         @perform 'follow'
       ,
 
       received: (data) ->
-        console.log data
-        $('.answers_container').append(data)
+        parsed_data= JSON.parse(data)
+        $('.answers_container').append(JST['templates/answer']({
+          answer: parsed_data['answer']
+          attachments: parsed_data['attachments']
+          }))
     })
 
 $(document).ready(answer_ready) 
 
 $(document).on('turbolinks:load', answer_ready)
 $(document).on('turbolinks:load', answers_subscript)
-
-$ -> 
-  $('body').append(JST['test']({ world: "World" }))
