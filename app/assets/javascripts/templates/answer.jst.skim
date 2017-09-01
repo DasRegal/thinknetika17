@@ -3,7 +3,7 @@
     .answer_vote_nav
       p.total_votes data-id=@answer.id 
         ="0"
-      -if gon.current_user && !@answer.user_id == gon.current_user.id
+      -if gon.current_user != null
         p.vote_up.vote 
           a href="/answers/#{@answer.id}/vote_up" data-method='post' data-remote='true' rel='nofollow' vote_up
         p.vote_down.vote 
@@ -16,7 +16,7 @@
       - for attachment in @attachments
         ==JST['templates/attachment'] attachment: attachment
     .links.col-lg-4
-      -if gon.current_user.id == gon.question.user_id
+      -if gon.current_user == gon.question.user_id
         p 
           a href="/questions/#{gon.question.id}/answers/#{@answer.id}/set_as_best" data-method='patch' data-remote='true' rel='nofollow' Mark as best
   .row

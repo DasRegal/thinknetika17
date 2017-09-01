@@ -27,10 +27,13 @@ answers_subscript = ->
 
       received: (data) ->
         parsed_data= JSON.parse(data)
-        $('.answers_container').append(JST['templates/answer']({
-          answer: parsed_data['answer']
-          attachments: parsed_data['attachments']
-          }))
+        answer = parsed_data['answer']
+        attachments = parsed_data['attachments']
+        if answer.user_id != gon.current_user 
+          $('.answers_container').append(JST['templates/answer']({
+            answer: answer
+            attachments: attachments
+            }))
     })
 
 $(document).ready(answer_ready) 
