@@ -29,7 +29,12 @@
                     p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
                 .form-group
                   =f.submit 'Save', class: 'btn btn-primary'
-
+    .row.answer_comments data-id=answer.id
+      p.h4 Comments:
+      .container.comments_container
+        = render answer.comments.order(created_at: :asc)
+      -if current_user
+        = render 'share/comment_form', commentable: answer        
     .row
       hr.col-lg-8
           

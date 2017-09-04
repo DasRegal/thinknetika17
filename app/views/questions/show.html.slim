@@ -36,10 +36,10 @@ div
       = render 'share/attachments', obj: @question
   .container.question_comments data-id=@question.id
     p.h4 Comments:
-    -if current_user
-      = render 'share/comment_form', commentable: @question
     .container.comments_container
       = render @question.comments.order(created_at: :asc)
+    -if current_user
+      = render 'share/comment_form', commentable: @question
   .container
     p.h4 Answers:
     hr.col-lg-8

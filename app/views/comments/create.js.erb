@@ -8,5 +8,5 @@ $('.validation_errors').val('');
 
 
   $(".<%= commentable %>_comments[data-id=<%= id %>] .comments_container").append('<%= j render @comment %>');
-  $(".<%= commentable %>_comments[data-id=<%= id %>] #comment_body").val('')
+  $(".<%= commentable %>_comments[data-id=<%= id %>] textarea").val('')
 <% end %>
