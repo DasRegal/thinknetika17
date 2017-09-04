@@ -1,0 +1,8 @@
+.container.comment_form_container
+  = form_for [commentable, @comment], method: :post, remote: true do |f|
+    .row
+      col-lg-6.form-group
+        =f.label :body, 'Your comment'
+        =f.text_area :body, class: 'form-control', rows: 3
+      col-lg-6.form-group
+        =f.submit 'Add comment', class: 'btn btn-primary'

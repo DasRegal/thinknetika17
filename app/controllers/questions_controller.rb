@@ -13,6 +13,7 @@ class QuestionsController < ApplicationController
     gon.question = @question
     @answer = @question.answers.new
     @answer.attachments.build
+    @comment = @question.comments.build
     # coccon не билдит аттачменты если их нет, поэтому не появляется форма
     if @question.attachments.count == 0
       @question.attachments.build

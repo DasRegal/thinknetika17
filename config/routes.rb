@@ -7,20 +7,17 @@ Rails.application.routes.draw do
     end
   end
 
-  concern :commentable do
-    member do
-      post :create_comment
-    end
-  end
-
   devise_for :users
-  resources :questions, concerns: [:voteable, :commentable] do
+  resources :questions, concerns: [:voteable] do
+    resources :comments, only: [:create], defaults: { commentable: 'questions' }
     resources :answers do 
       patch 'set_as_best', on: :member
     end
   end
 
-  resources :answers, concerns: [:voteable, :commentable], only: [:vote_up, :vote_down, :vote_delete, :create_comment]
+  resources :answers, concerns: [:voteable], only: [:vote_up, :vote_down, :vote_delete] do
+    resources :comments, only: [:create], defaults: { commentable: 'answers' }
+  end
   
   delete '/attachment/:id', to: 'attachments#destroy', as: :destroy_attachment
 
