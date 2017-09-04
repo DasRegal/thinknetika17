@@ -1,4 +1,5 @@
 .container.comment_form_container
+  - @comment ||= commentable.comments.build
   = form_for [commentable, @comment], method: :post, remote: true do |f|
     .row
       col-lg-6.form-group
