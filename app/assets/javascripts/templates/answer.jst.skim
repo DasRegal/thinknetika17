@@ -19,5 +19,10 @@
       -if gon.current_user == gon.question.user_id
         p 
           a href="/questions/#{gon.question.id}/answers/#{@answer.id}/set_as_best" data-method='patch' data-remote='true' rel='nofollow' Mark as best
+  .row.answer_comments data-id=@answer.id
+    p.h4 Comments:
+    .container.comments_container
+    -if gon.current_user != null
+      == JST['templates/comment_form'] commentable: @answer       
   .row
     hr.col-lg-8

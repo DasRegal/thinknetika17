@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
   before_action :set_commentable
+  after_action :publish_comment, only: [:create]
 
   def create
     @comment = @commentable.comments.new(commentable_params)
@@ -27,5 +28,20 @@ class CommentsController < ApplicationController
 
   def commentable_id
     (commentable_name.classify.downcase + '_id').to_sym
+  end
+
+  def publish_comment
+    return if @comment.errors.any?
+    model = @comment.commentable.class.name.downcase
+    id = @comment.commentable.id
+
+    ActionCable.server.broadcast(
+      "comments/#{model}_#{id}",
+       {comment: { id: @comment.id,
+                  body: @comment.body,
+                  commentable_id: @comment.commentable_id,
+                  commentable_type: @comment.commentable_type,
+                  user_id: @comment.user_id } }.to_json
+      )        
   end
 end
