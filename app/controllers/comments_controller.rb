@@ -33,10 +33,10 @@ class CommentsController < ApplicationController
   def publish_comment
     return if @comment.errors.any?
     model = @comment.commentable.class.name.downcase
-    id = @comment.commentable.id
+    id = @comment.commentable.try(:question) ? @comment.commentable.question.id : @comment.commentable.id
 
     ActionCable.server.broadcast(
-      "comments/#{model}_#{id}",
+      "comments/question_#{id}",
        {comment: { id: @comment.id,
                   body: @comment.body,
                   commentable_id: @comment.commentable_id,

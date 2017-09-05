@@ -15,9 +15,7 @@ answer_ready =  ->
 
 answers_subscript = ->
   if gon.question 
-    if (App.answers_sub) 
-      App.cable.subscriptions.remove(App.answers_sub)
-    App.answers_sub = App.cable.subscriptions.create({
+    App.cable.subscriptions.create({
       channel: 'AnswersChannel', 
       question_id: gon.question.id
     },{

@@ -65,15 +65,14 @@ class AnswersController < ApplicationController
 
   def publish_answer
     return if @answer.errors.any?
+    attachments = @answer.
+      attachments.
+      collect{|aa| { id: aa.id, url: aa.file.url, file_name: aa.file.file.filename } }
     ActionCable.server.broadcast(
       "question_#{@question.id}",
        {answer: { id: @answer.id,
                   body: @answer.body,
                   user_id: @answer.user_id },
-        attachments: @answer.
-          attachments.
-          collect{|aa| { id: aa.id, url: aa.file.url, file_name: aa.file.file.filename } }
-        }.to_json
-      )    
+        attachments: attachments }.to_json )          
   end
 end
