@@ -8,16 +8,20 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
-  resources :questions, concerns: [:voteable] do 
+  resources :questions, concerns: [:voteable] do
+    resources :comments, only: [:create], defaults: { commentable: 'questions' }
     resources :answers do 
       patch 'set_as_best', on: :member
     end
   end
 
-  resources :answers, concerns: [:voteable], only: [:vote_up, :vote_down, :vote_delete]
+  resources :answers, concerns: [:voteable], only: [:vote_up, :vote_down, :vote_delete] do
+    resources :comments, only: [:create], defaults: { commentable: 'answers' }
+  end
   
   delete '/attachment/:id', to: 'attachments#destroy', as: :destroy_attachment
 
   root to: 'questions#index'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
+  mount ActionCable.server => '/cable'
 end

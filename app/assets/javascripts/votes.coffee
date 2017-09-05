@@ -1,7 +1,7 @@
 vote = ->
-  $('.vote').bind 'ajax:success', (e) ->
+  $(document).on 'ajax:success', '.vote', (e) ->
     $(this).parent().find('p.total_votes').html(e.detail[0])
-  $('.vote').bind 'ajax:error', (e) ->
+  $(document).on 'ajax:error', '.vote', (e) ->
     $('.noty_wrapper').html(e.detail[0])
 
 

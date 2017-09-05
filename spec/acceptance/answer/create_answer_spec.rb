@@ -37,4 +37,28 @@ feature 'Answer for question', %q{
 
     expect(page).to_not have_content 'Your answer'
   end
+
+  scenario 'answer appears on another user page', js: true do 
+    Capybara.using_session('user') do 
+      sign_in user
+      visit question_path(question)
+    end
+
+    Capybara.using_session('guest') do 
+      visit question_path(question)
+    end
+
+    Capybara.using_session('user') do 
+      fill_in 'Your answer', with: 'My test answer'
+      click_on 'Add answer' 
+      expect(page).to have_content 'Your answer was successfully created'
+      within '.answers_container' do 
+        expect(page).to have_content 'My test answer'
+      end           
+    end
+
+    Capybara.using_session('guest') do 
+      expect(page).to have_content 'My test answer'
+    end
+  end
 end

@@ -1,7 +1,2 @@
 .questions_wrapper
-  -@questions.each do |q|
-    .question_content
-      .question_title
-        =link_to q.title, question_path(q)
-      .question_body
-        =q.body
+  =render @questions

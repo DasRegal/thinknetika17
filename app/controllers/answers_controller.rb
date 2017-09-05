@@ -3,6 +3,8 @@ class AnswersController < ApplicationController
   
   before_action :authenticate_user!, only: [:create, :destroy, :update, :set_as_best]
 
+  after_action :publish_answer, only: [:create]
+
   def edit
     answer
   end
@@ -59,5 +61,18 @@ class AnswersController < ApplicationController
 
   def question
     @question ||= Question.find(params[:question_id])
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    attachments = @answer.
+      attachments.
+      collect{|aa| { id: aa.id, url: aa.file.url, file_name: aa.file.file.filename } }
+    ActionCable.server.broadcast(
+      "question_#{@question.id}",
+       {answer: { id: @answer.id,
+                  body: @answer.body,
+                  user_id: @answer.user_id },
+        attachments: attachments }.to_json )          
   end
 end

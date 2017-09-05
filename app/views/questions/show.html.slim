@@ -34,6 +34,12 @@ div
   div.q_attachments_wrapper
     ul.q_attachments_container
       = render 'share/attachments', obj: @question
+  .container.question_comments data-id=@question.id
+    p.h4 Comments:
+    .container.comments_container
+      = render @question.comments.order(created_at: :asc)
+    -if current_user
+      = render 'share/comment_form', commentable: @question
   .container
     p.h4 Answers:
     hr.col-lg-8

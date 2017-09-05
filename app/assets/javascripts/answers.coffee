@@ -12,5 +12,29 @@ answer_ready =  ->
   $('.answers_container').on 'click', '.delete_answer', (e) -> 
     id = $(this).data('answerId')
 
-$(document).ready(answer_ready) # "вешаем" функцию ready на событие document.ready
-$(document).on('turbolinks:load', answer_ready)  # "вешаем" функцию ready на событие page:load
+
+answers_subscript = ->
+  if gon.question 
+    App.cable.subscriptions.create({
+      channel: 'AnswersChannel', 
+      question_id: gon.question.id
+    },{
+      connected: ->
+        @perform 'follow'
+      ,
+
+      received: (data) ->
+        parsed_data= JSON.parse(data)
+        answer = parsed_data['answer']
+        attachments = parsed_data['attachments']
+        if answer.user_id != gon.current_user 
+          $('.answers_container').append(JST['templates/answer']({
+            answer: answer
+            attachments: attachments
+            }))
+    })
+
+$(document).ready(answer_ready) 
+
+$(document).on('turbolinks:load', answer_ready)
+$(document).on('turbolinks:load', answers_subscript)

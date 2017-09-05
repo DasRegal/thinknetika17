@@ -1,0 +1,3 @@
+.attachment data-id=@attachment.id
+  li 
+    a href=@attachment.url =@attachment.file_name

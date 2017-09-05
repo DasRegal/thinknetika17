@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.configure do |config| 
   Capybara.default_max_wait_time = 5
   Capybara.javascript_driver = :webkit
+  Capybara.server = :puma 
   
   config.use_transactional_fixtures = false
   config.include AcceptanceHelper, type: :feature

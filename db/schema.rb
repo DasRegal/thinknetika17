@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170824090106) do
+ActiveRecord::Schema.define(version: 20170904064815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20170824090106) do
     t.integer "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.boolean "is_best", default: false
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -34,12 +34,23 @@ ActiveRecord::Schema.define(version: 20170824090106) do
     t.index ["attachmentable_id", "attachmentable_type"], name: "index_attachments_on_attachmentable_id_and_attachmentable_type"
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "commentable_type"
+    t.integer "commentable_id"
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commentable_id", "commentable_type"], name: "index_comments_on_commentable_id_and_commentable_type"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string "title"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -71,6 +82,4 @@ ActiveRecord::Schema.define(version: 20170824090106) do
     t.index ["voteable_id", "voteable_type"], name: "index_votes_on_voteable_id_and_voteable_type"
   end
 
-  add_foreign_key "answers", "users"
-  add_foreign_key "questions", "users"
 end

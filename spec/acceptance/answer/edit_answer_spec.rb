@@ -43,7 +43,7 @@ feature 'Answerediting', %q{
         click_on 'Save'
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'edited answer'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_selector "textarea#edit_answer_body_#{answer.id}"
       end
       expect(page).to have_content 'Your answer was succesfully updated'
     end
@@ -74,7 +74,7 @@ feature 'Answerediting', %q{
         click_on 'Save'
        
         expect(page).to have_content 'new edited answer'
-        expect(page).to_not have_selector 'textarea'        
+        expect(page).to_not have_selector "textarea#edit_answer_body_#{answer.id}"        
       end
       expect(page).to_not have_content 'My new answer'
       expect(page).to have_content 'Your answer was succesfully updated'

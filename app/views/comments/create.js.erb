@@ -1,0 +1,12 @@
+$('.noty_wrapper').html("<%= j render 'share/noty' %>")
+$('.validation_errors').val('');
+<% if @comment.errors.present? %>
+  $('.validation_errors').html("<%= @comment.errors.full_messages.join('<br') %>");
+<% else %>
+  <% commentable = @comment.commentable.class.name.downcase %>
+  <% id = @comment.commentable.id %>
+
+
+  $(".<%= commentable %>_comments[data-id=<%= id %>] .comments_container").append('<%= j render @comment %>');
+  $(".<%= commentable %>_comments[data-id=<%= id %>] textarea").val('')
+<% end %>
