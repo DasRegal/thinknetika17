@@ -11,7 +11,6 @@ class QuestionsController < ApplicationController
 
   def show
     gon.question = @question
-    gon.question_answers = @question.answers.collect{ |a| a.id }.to_json
 
     @answer = @question.answers.new
     @answer.attachments.build
