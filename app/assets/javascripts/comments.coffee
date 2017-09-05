@@ -5,8 +5,7 @@ question_comments_subscript = ->
   if gon.question 
     App.cable.subscriptions.create({
       channel: 'CommentsChannel', 
-      id: gon.question.id,
-      commentable: 'question'
+      id: gon.question.id
     },{
       connected: ->
         @perform 'follow'
@@ -21,26 +20,6 @@ question_comments_subscript = ->
             comment: comment
             }))
     })
-# answer_comments_subscript = ->
-#   if gon.question 
-#     $.each JSON.parse(gon.question_answers), (index, value) ->
-#       App.cable.subscriptions.create({
-#         channel: 'CommentsChannel', 
-#         id: value,
-#         commentable: 'answer'
-#       },{
-#         connected: ->
-#           @perform 'follow'
-#         ,
-
-#         received: (data) ->
-#           comment = JSON.parse(data)['comment']
-#           if comment.user_id != gon.current_user
-#             $(".answer_comments[data-id=#{value}] .comments_container").append(JST['templates/comment']({
-#               comment: comment
-#               }))
-#       })
 
 
 $(document).on('turbolinks:load', question_comments_subscript)
-# $(document).on('turbolinks:load', answer_comments_subscript)
