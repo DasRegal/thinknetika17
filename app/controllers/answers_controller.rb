@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   include Voted
-  
+
   before_action :authenticate_user!, only: [:create, :destroy, :update, :set_as_best]
 
   after_action :publish_answer, only: [:create]
@@ -19,7 +19,7 @@ class AnswersController < ApplicationController
     end
   end
 
-  def update 
+  def update
     if current_user.author_of?(answer)
       if answer.update(answer_params)
         flash.now[:notice] = 'Your answer was succesfully updated'
@@ -29,7 +29,7 @@ class AnswersController < ApplicationController
     else
       flash.now[:alert] = 'You dont have enough privilege'
     end
-  end 
+  end
 
   def destroy
     if current_user.author_of?(answer)
@@ -55,7 +55,7 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
   end
 
-  def answer 
+  def answer
     @answer ||= Answer.find(params[:id])
   end
 
@@ -65,14 +65,10 @@ class AnswersController < ApplicationController
 
   def publish_answer
     return if @answer.errors.any?
-    attachments = @answer.
-      attachments.
-      collect{|aa| { id: aa.id, url: aa.file.url, file_name: aa.file.file.filename } }
+
     ActionCable.server.broadcast(
       "question_#{@question.id}",
-       {answer: { id: @answer.id,
-                  body: @answer.body,
-                  user_id: @answer.user_id },
-        attachments: attachments }.to_json )          
+      @answer.to_json(include: :attachments)
+      )
   end
 end

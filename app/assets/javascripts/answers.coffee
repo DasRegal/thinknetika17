@@ -1,7 +1,7 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-answer_ready =  -> 
+answer_ready =  ->
   $('.edit_answer_form').hide()
   $('.answers_container').on 'click', '.edit_answer_link', (e) ->
     e.preventDefault();
@@ -9,14 +9,14 @@ answer_ready =  ->
     $("#edit_answer_form_"+id).show()
     $(this).hide();
 
-  $('.answers_container').on 'click', '.delete_answer', (e) -> 
+  $('.answers_container').on 'click', '.delete_answer', (e) ->
     id = $(this).data('answerId')
 
 
 answers_subscript = ->
-  if gon.question 
+  if gon.question
     App.cable.subscriptions.create({
-      channel: 'AnswersChannel', 
+      channel: 'AnswersChannel',
       question_id: gon.question.id
     },{
       connected: ->
@@ -24,17 +24,14 @@ answers_subscript = ->
       ,
 
       received: (data) ->
-        parsed_data= JSON.parse(data)
-        answer = parsed_data['answer']
-        attachments = parsed_data['attachments']
-        if answer.user_id != gon.current_user 
+        answer = JSON.parse(data)
+        if answer.user_id != gon.current_user
           $('.answers_container').append(JST['templates/answer']({
             answer: answer
-            attachments: attachments
             }))
     })
 
-$(document).ready(answer_ready) 
+$(document).ready(answer_ready)
 
 $(document).on('turbolinks:load', answer_ready)
 $(document).on('turbolinks:load', answers_subscript)

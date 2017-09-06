@@ -1,3 +1,4 @@
 .attachment data-id=@attachment.id
-  li 
-    a href=@attachment.url =@attachment.file_name
+  li
+    - str = @attachment['file'].url
+    a href=str =decodeURI(str.substr(str.lastIndexOf('/')+1, str.length-1))

@@ -2,9 +2,9 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 question_comments_subscript = ->
-  if gon.question 
+  if gon.question
     App.cable.subscriptions.create({
-      channel: 'CommentsChannel', 
+      channel: 'CommentsChannel',
       id: gon.question.id
     },{
       connected: ->
@@ -12,7 +12,7 @@ question_comments_subscript = ->
       ,
 
       received: (data) ->
-        comment = JSON.parse(data)['comment']
+        comment = JSON.parse(data)
         if comment.user_id != gon.current_user
           commentable = comment['commentable_type'].toLowerCase()
           id = comment['commentable_id']
