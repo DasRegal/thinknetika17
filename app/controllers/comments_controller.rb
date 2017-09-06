@@ -37,11 +37,7 @@ class CommentsController < ApplicationController
 
     ActionCable.server.broadcast(
       "comments/question_#{id}",
-       {comment: { id: @comment.id,
-                  body: @comment.body,
-                  commentable_id: @comment.commentable_id,
-                  commentable_type: @comment.commentable_type,
-                  user_id: @comment.user_id } }.to_json
-      )        
+       @comment.to_json
+      )
   end
 end
