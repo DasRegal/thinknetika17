@@ -5,27 +5,22 @@ class AnswersController < ApplicationController
 
   after_action :publish_answer, only: [:create]
 
+  respond_to :js
+  respond_to :json, only: :create
+
   def edit
     answer
   end
 
   def create
-    @answer = question.answers.new(answer_params)
-    @answer.user = current_user
-    if @answer.save
-      flash.now[:notice] = 'Your answer was successfully created'
-    else
-      flash.now[:alert] = 'Error while creating answer'
-    end
+    @answer = question.answers.create(answer_params.merge(user: current_user))
+    respond_with @answer
   end
 
   def update
     if current_user.author_of?(answer)
-      if answer.update(answer_params)
-        flash.now[:notice] = 'Your answer was succesfully updated'
-      else
-        flash.now[:alert] = 'Error while creating answer'
-      end
+      answer.update(answer_params)
+      respond_with answer
     else
       flash.now[:alert] = 'You dont have enough privilege'
     end
@@ -33,8 +28,7 @@ class AnswersController < ApplicationController
 
   def destroy
     if current_user.author_of?(answer)
-      answer.destroy
-      flash.now[:notice] = 'Your answer was succesfully deleted'
+      respond_with answer.destroy
     else
       flash.now[:alert] = 'You dont have enough privilege'
     end
