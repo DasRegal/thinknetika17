@@ -59,7 +59,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-group :test do 
+group :test do
   gem 'shoulda-matchers', git: 'https://github.com/thoughtbot/shoulda-matchers.git', branch: 'rails-5'
   #для save_and_open_page in acceptance tests
   gem 'launchy'
@@ -78,3 +78,4 @@ gem 'pry'
 gem 'pry-rails'
 gem 'gon'
 gem 'skim'
+gem 'responders'

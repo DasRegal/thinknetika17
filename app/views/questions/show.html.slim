@@ -2,7 +2,7 @@
   .validation_errors
     -@answer.errors.full_messages.each do |msg|
       p =msg
-div 
+div
   .container
     .col-lg-6
       .question_vote_nav
@@ -14,7 +14,7 @@ div
     -if current_user&.author_of?(@question)
       p =link_to 'delete question', question_path(@question), method: :delete
       p =link_to 'Edit question','', class: 'edit_question_link'
-      .edit_question_form 
+      .edit_question_form
         =form_for @question, remote: true, method: :patch  do |f|
           .container
             .form-group.col-lg-6
@@ -26,7 +26,7 @@ div
               =f.text_area :body, class: 'form-control', rows: 5
           .container
             .col-lg-6.form-group
-              =f.fields_for :attachments do |attach|
+              =f.fields_for :attachments, @question.attachments.build do |attach|
                 p= render 'share/attachment_fields', f: attach
                 p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
               .form-group
@@ -43,19 +43,19 @@ div
   .container
     p.h4 Answers:
     hr.col-lg-8
-  .answers_container    
+  .answers_container
     =render @question.answers.order(is_best: :desc , created_at: :asc)
 
 -if current_user
   .container
-    =form_for [@question, @answer], method: :post, remote: true do |f| 
+    =form_for [@question, @answer], method: :post, remote: true do |f|
       .row
         .col-lg-6.form-group
           =f.label :body, 'Your answer'
           =f.text_area :body,class: 'form-control', rows: 5
       .row
         .col-lg-6
-          =f.fields_for :attachments do |attach|
+          =f.fields_for :attachments, @answer.attachments.build do |attach|
             p= render 'share/attachment_fields', f: attach
             p= link_to_add_association 'add file', f, :attachments, partial: 'share/attachment_fields'
       .row
