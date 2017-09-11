@@ -2,14 +2,11 @@ class CommentsController < ApplicationController
   before_action :set_commentable
   after_action :publish_comment, only: [:create]
 
+  respond_to :js
+
   def create
-    @comment = @commentable.comments.new(commentable_params)
-    @comment.user = current_user
-    if @comment.save
-      flash.now[:notice] = 'Your comment created'
-    else
-      flash.now[:alert] = 'Error while creating comment'
-    end
+    @comment = @commentable.comments.create(commentable_params.merge(user: current_user))
+    respond_with @comment
   end
 
   private

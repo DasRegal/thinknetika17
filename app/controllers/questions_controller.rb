@@ -2,43 +2,29 @@ class QuestionsController < ApplicationController
   include Voted
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
-  
-  after_action :publish_question, only: [:create]  
+  before_action :build_answer, only: [:show]
+
+  after_action :publish_question, only: [:create]
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
     gon.question = @question
-
-    @answer = @question.answers.new
-    @answer.attachments.build
-    @comment = @question.comments.build
-    # coccon не билдит аттачменты если их нет, поэтому не появляется форма
-    if @question.attachments.count == 0
-      @question.attachments.build
-    end
+    respond_with @question
   end
 
   def new
-    @question = Question.new
-    @question.attachments.build
+    respond_with @question = Question.new
   end
 
   def edit
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      flash[:notice] = 'Your question successfully created.'
-      redirect_to @question
-    else
-      flash[:alert] = 'Error while creating question'
-      render :new
-    end
+    @question = Question.create(question_params.merge(user: current_user))
+    respond_with @question
   end
 
   def update
@@ -55,9 +41,7 @@ class QuestionsController < ApplicationController
 
   def destroy
     if current_user.author_of?(@question)
-      @question.destroy
-      flash[:notice] = 'Your question was succesfully deleted'
-      redirect_to questions_path
+      respond_with @question.destroy
     else
       flash[:alert] = 'You dont have enough privilege'
       render :show
@@ -83,5 +67,9 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :id, :_destroy])
+  end
+
+  def build_answer
+    @answer = @question.answers.new
   end
 end
