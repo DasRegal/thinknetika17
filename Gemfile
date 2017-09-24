@@ -45,6 +45,8 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'capybara-webkit'
+  gem 'capybara-email'
+  gem 'letter_opener'
 end
 
 group :development do
@@ -81,3 +83,4 @@ gem 'skim'
 gem 'responders'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'omniauth-twitter'
