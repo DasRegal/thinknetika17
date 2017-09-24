@@ -21,6 +21,33 @@ RSpec.describe User do
     end
   end
 
+  describe '.create_without_email' do
+    let(:auth) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456') }
+    it 'returns user' do
+      expect(User.create_without_email(auth)).to be_a(User)
+    end
+
+    it 'creates new user' do
+      expect{ User.create_without_email(auth) }.to change(User, :count).by(1)
+    end
+
+    it 'creates new authorization' do
+      user = User.create_without_email(auth)
+      expect(user.authorizations).to_not be_empty
+    end
+
+    it 'creates new authorization with uid and provider' do
+      authorization = User.create_without_email(auth).authorizations.first
+      expect(authorization.provider).to eq auth.provider
+      expect(authorization.uid).to eq auth.uid
+    end
+
+    it 'fill email with some value' do
+      user = User.create_without_email(auth)
+      expect(user.email).to_not be_empty
+    end
+  end
+
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
     let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456') }
