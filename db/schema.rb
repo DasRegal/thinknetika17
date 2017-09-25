@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20170924163854) do
     t.integer "question_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.boolean "is_best", default: false
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20170924163854) do
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id"
+    t.integer "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id"
   end
 
@@ -77,9 +77,7 @@ ActiveRecord::Schema.define(version: 20170924163854) do
     t.inet "current_sign_in_ip"
     t.inet "last_sign_in_ip"
     t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
+    t.boolean "is_confirmed", default: true
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -96,6 +94,4 @@ ActiveRecord::Schema.define(version: 20170924163854) do
     t.index ["voteable_id", "voteable_type"], name: "index_votes_on_voteable_id_and_voteable_type"
   end
 
-  add_foreign_key "answers", "users"
-  add_foreign_key "questions", "users"
 end
