@@ -11,6 +11,7 @@ class User < ApplicationRecord
           :trackable,
           :validatable,
           :omniauthable,
+          :confirmable,
           omniauth_providers: [:facebook, :twitter]
 
   def author_of?(obj)
@@ -22,14 +23,20 @@ class User < ApplicationRecord
     return authorization.user if authorization
 
     email = auth.info[:email]
+<<<<<<< HEAD
     return nil unless email
 
+=======
+    return User.create_without_email(auth) unless email
+    
+>>>>>>> parent of fe1e13d... delete device confirmation
     user = User.where(email: email).first
     if user
       user.create_authorization(auth) if user
     else
       password = Devise.friendly_token[0, 20]
       user = User.create!(email: email, password: password, password_confirmation: password)
+      user.skip_confirmation!
       user.create_authorization(auth)
     end
     user
@@ -45,6 +52,7 @@ class User < ApplicationRecord
 
   def self.create_with_confirmation(auth)
     password = Devise.friendly_token[0, 20]
+<<<<<<< HEAD
     fake_email = Devise.friendly_token[0, 10] + '@fake.fake'
     confirmation_token = Devise.friendly_token[0, 30]
     user = User.create!(
@@ -53,6 +61,11 @@ class User < ApplicationRecord
       password_confirmation: password,
       confirmation_token: confirmation_token,
       confirmation_sent_at: Time.now)
+=======
+    fake_email = Devise.friendly_token[0, 10] + '@gmail.com'
+    user = User.create(email: fake_email, password: password, password_confirmation: password)
+    user.skip_confirmation!
+>>>>>>> parent of fe1e13d... delete device confirmation
     user.create_authorization(auth)
     user
   end
