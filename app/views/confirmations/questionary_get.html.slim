@@ -1,0 +1,4 @@
+=form_for @user, method: :post, url: confirmation_questionary_post_path(@user.id) do |f|
+  =f.label :email, 'Email'
+  =f.text_field :email
+  =f.submit 'Submit'

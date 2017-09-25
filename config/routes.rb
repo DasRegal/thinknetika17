@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   end
 
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
-  
+
   resources :questions, concerns: [:voteable] do
     resources :comments, only: [:create], defaults: { commentable: 'questions' }
     resources :answers do
@@ -25,4 +25,10 @@ Rails.application.routes.draw do
   root to: 'questions#index'
 
   mount ActionCable.server => '/cable'
+
+  get '/confirmations/questionary/:user_id', to: 'confirmations#questionary_get', as: 'confirmation_questionary_get'
+  post '/confirmations/questionary/:user_id', to: 'confirmations#questionary_post', as: 'confirmation_questionary_post'
+
+  get '/confirmations/confirm/:token', to: 'confirmations#confirm', as: 'confirmation_confirm'
+
 end
